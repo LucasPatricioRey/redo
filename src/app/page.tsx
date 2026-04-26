@@ -11,8 +11,8 @@ const stack = [
   "Next.js 16",
   "TypeScript",
   "Tailwind CSS 4",
-  "Prisma",
-  "PostgreSQL",
+  "MongoDB",
+  "MongoDB Driver",
   "Zod",
   "Vercel",
 ] as const;
@@ -48,10 +48,9 @@ export default function Home() {
               Una marca de grooming que combina precision, experiencia y tecnologia.
             </h2>
             <p className="mt-6 max-w-2xl text-base leading-8 text-muted sm:text-lg">
-              {siteConfig.description} REDO esta pensado como un proyecto fuerte
-              de portfolio: comercialmente creible para un negocio real y
-              tecnicamente listo para crecer hacia reservas online, admin y
-              automatizaciones.
+              {siteConfig.description} REDO combina una presencia digital
+              cuidada con una base tecnica preparada para reservas online,
+              administracion interna y crecimiento operativo.
             </p>
             <div className="mt-10 flex flex-wrap gap-3">
               <a
@@ -79,13 +78,13 @@ export default function Home() {
               </p>
               <p className="mt-3 text-sm leading-7 text-muted">
                 Imagen premium, operacion simple y foco en experiencia de
-                cliente para transmitir un producto serio en portfolio y GitHub.
+                cliente para transmitir una marca seria y confiable.
               </p>
             </article>
 
             <article className="rounded-[1.75rem] border border-border bg-surface p-6">
               <p className="text-sm uppercase tracking-[0.3em] text-accent-soft">
-                Valor para entrevistas
+                Beneficios clave
               </p>
               <ul className="mt-4 space-y-3 text-sm leading-7 text-muted">
                 {experienceHighlights.map((item) => (
@@ -237,8 +236,7 @@ export default function Home() {
             </p>
             <div className="mt-6 space-y-4 font-mono text-sm leading-7 text-muted">
               <p>`src/app` para rutas, landing y endpoints.</p>
-              <p>`src/lib` para configuracion, datos y acceso a Prisma.</p>
-              <p>`prisma` para esquema de base de datos.</p>
+              <p>`src/lib` para configuracion, datos y acceso a MongoDB.</p>
               <p>`docs` para definicion de producto y decisiones tecnicas.</p>
             </div>
           </article>
@@ -249,18 +247,18 @@ export default function Home() {
             </p>
             <p className="mt-4 text-sm leading-7 text-muted">
               Esta primera base ya incluye branding, documentacion, endpoint de
-              salud, endpoint de reservas con validacion y esquema inicial en
-              Prisma para servicios, equipo y solicitudes de turno.
+              salud, endpoint de reservas con validacion e integracion inicial
+              con MongoDB para solicitudes de turno.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <span className="rounded-full border border-border px-4 py-2 text-xs uppercase tracking-[0.25em] text-accent-soft">
                 listo para Vercel
               </span>
               <span className="rounded-full border border-border px-4 py-2 text-xs uppercase tracking-[0.25em] text-accent-soft">
-                listo para PostgreSQL
+                listo para MongoDB
               </span>
               <span className="rounded-full border border-border px-4 py-2 text-xs uppercase tracking-[0.25em] text-accent-soft">
-                pensado para portfolio
+                listo para reservas
               </span>
             </div>
           </article>

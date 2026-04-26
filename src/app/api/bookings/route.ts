@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { getDb } from "@/lib/db";
+import { createBookingInquiry } from "@/lib/booking-repository";
 
 const bookingSchema = z.object({
   clientName: z.string().min(2).max(80),
-  clientEmail: z.email(),
+  clientEmail: z.string().email(),
   clientPhone: z.string().min(8).max(30),
   requestedService: z.string().min(2).max(80),
   preferredDate: z.string().datetime().optional(),
@@ -17,18 +17,15 @@ export async function POST(request: Request) {
   try {
     const json = await request.json();
     const data = bookingSchema.parse(json);
-    const db = getDb();
-
-    const booking = await db.bookingInquiry.create({
-      data: {
-        ...data,
-        preferredDate: data.preferredDate ? new Date(data.preferredDate) : null,
-      },
-      select: {
-        id: true,
-        status: true,
-        createdAt: true,
-      },
+    const booking = await createBookingInquiry({
+      clientName: data.clientName,
+      clientEmail: data.clientEmail,
+      clientPhone: data.clientPhone,
+      requestedService: data.requestedService,
+      preferredDate: data.preferredDate ? new Date(data.preferredDate) : null,
+      preferredStylist: data.preferredStylist,
+      notes: data.notes,
+      status: "pending",
     });
 
     return NextResponse.json(
@@ -52,7 +49,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         message:
-          "No se pudo registrar la solicitud. Verifica la base de datos y las variables de entorno.",
+          "No se pudo registrar la solicitud. Verifica MongoDB y las variables de entorno.",
       },
       { status: 500 },
     );
