@@ -6,6 +6,7 @@ import {
 import { signOutAdminAction } from "@/app/admin/actions";
 import { requireAdminAuth } from "@/lib/admin-auth";
 import {
+  type BookingStatus,
   getBookingOverview,
   listBookingInquiries,
 } from "@/lib/booking-repository";
@@ -23,12 +24,32 @@ const statusClasses = {
   cancelled: "border-[#6e3e3e] bg-[#2d1c1c] text-[#f2b2b2]",
 } as const;
 
-export default async function AdminPage() {
+type AdminPageProps = {
+  searchParams?: Promise<{
+    status?: string;
+    q?: string;
+  }>;
+};
+
+function isBookingStatus(value?: string): value is BookingStatus {
+  return value === "pending" || value === "confirmed" || value === "cancelled";
+}
+
+export default async function AdminPage({ searchParams }: AdminPageProps) {
   await requireAdminAuth();
+
+  const params = searchParams ? await searchParams : undefined;
+  const statusFilter = isBookingStatus(params?.status)
+    ? params.status
+    : undefined;
+  const queryFilter = params?.q?.trim() || "";
 
   const [overview, bookings] = await Promise.all([
     getBookingOverview(),
-    listBookingInquiries(),
+    listBookingInquiries({
+      status: statusFilter,
+      query: queryFilter || undefined,
+    }),
   ]);
 
   return (
@@ -114,9 +135,51 @@ export default async function AdminPage() {
           </p>
         </div>
 
+        <form className="mt-6 grid gap-4 rounded-[1.5rem] border border-border bg-surface-strong p-4 lg:grid-cols-[1fr_220px_auto]">
+          <label className="grid gap-2 text-sm text-muted">
+            Buscar
+            <input
+              type="text"
+              name="q"
+              defaultValue={queryFilter}
+              className="h-11 rounded-2xl border border-border bg-surface px-4 text-foreground outline-none transition-colors focus:border-accent"
+              placeholder="Nombre, email, telefono o servicio"
+            />
+          </label>
+
+          <label className="grid gap-2 text-sm text-muted">
+            Estado
+            <select
+              name="status"
+              defaultValue={statusFilter ?? ""}
+              className="h-11 rounded-2xl border border-border bg-surface px-4 text-foreground outline-none transition-colors focus:border-accent"
+            >
+              <option value="">Todos</option>
+              <option value="pending">Pendientes</option>
+              <option value="confirmed">Confirmados</option>
+              <option value="cancelled">Cancelados</option>
+            </select>
+          </label>
+
+          <div className="flex items-end gap-3">
+            <button
+              type="submit"
+              className="h-11 rounded-full bg-accent px-5 text-sm font-semibold text-[#1b1510] transition-transform duration-200 hover:-translate-y-0.5"
+            >
+              Filtrar
+            </button>
+            <Link
+              href="/admin"
+              className="h-11 rounded-full border border-border px-5 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-white/5"
+            >
+              Limpiar
+            </Link>
+          </div>
+        </form>
+
         {bookings.length === 0 ? (
           <div className="mt-8 rounded-[1.5rem] border border-dashed border-border bg-surface-strong px-6 py-10 text-sm text-muted">
-            Todavia no hay solicitudes registradas.
+            No se encontraron solicitudes con esos filtros.
           </div>
         ) : (
           <div className="mt-8 grid gap-4">
