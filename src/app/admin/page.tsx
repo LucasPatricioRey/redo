@@ -1,6 +1,10 @@
 import Link from "next/link";
 
-import { BookingStatusActions } from "@/components/booking-status-actions";
+import {
+  BookingStatusActions,
+} from "@/components/booking-status-actions";
+import { signOutAdminAction } from "@/app/admin/actions";
+import { requireAdminAuth } from "@/lib/admin-auth";
 import {
   getBookingOverview,
   listBookingInquiries,
@@ -20,6 +24,8 @@ const statusClasses = {
 } as const;
 
 export default async function AdminPage() {
+  await requireAdminAuth();
+
   const [overview, bookings] = await Promise.all([
     getBookingOverview(),
     listBookingInquiries(),
@@ -47,6 +53,14 @@ export default async function AdminPage() {
           >
             Volver al sitio
           </Link>
+          <form action={signOutAdminAction}>
+            <button
+              type="submit"
+              className="rounded-full border border-border px-5 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-white/5"
+            >
+              Cerrar sesion
+            </button>
+          </form>
         </div>
       </header>
 
