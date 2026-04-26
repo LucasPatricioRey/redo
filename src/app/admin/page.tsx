@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { BookingStatusActions } from "@/components/booking-status-actions";
 import {
   getBookingOverview,
   listBookingInquiries,
@@ -136,6 +137,7 @@ export default async function AdminPage() {
 
                   <div className="max-w-xl text-sm leading-7 text-muted xl:text-right">
                     {booking.notes || "Sin comentarios adicionales."}
+                    <BookingStatusActions booking={booking} />
                   </div>
                 </div>
               </article>

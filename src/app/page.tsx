@@ -61,6 +61,12 @@ export default function Home() {
                 Ver MVP
               </a>
               <a
+                href="/admin"
+                className="rounded-full border border-border px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-white/5"
+              >
+                Abrir panel admin
+              </a>
+              <a
                 href="#stack"
                 className="rounded-full border border-border px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-white/5"
               >
