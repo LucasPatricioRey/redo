@@ -6,6 +6,7 @@ import {
   siteConfig,
   stylists,
 } from "@/lib/site";
+import { BookingRequestForm } from "@/components/booking-request-form";
 
 const stack = [
   "Next.js 16",
@@ -196,6 +197,39 @@ export default function Home() {
                   </p>
                 </article>
               ))}
+            </div>
+          </article>
+        </section>
+
+        <section className="grid gap-6 xl:grid-cols-[0.8fr_1.2fr]">
+          <article className="rounded-[2rem] border border-border bg-surface p-8">
+            <p className="text-sm uppercase tracking-[0.3em] text-accent-soft">
+              Reservas
+            </p>
+            <h3 className="mt-3 font-heading text-4xl text-foreground">
+              Solicita tu turno en pocos pasos.
+            </h3>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              El cliente puede enviar una solicitud con su servicio, horario
+              estimado y profesional preferido. REDO recibe la consulta y
+              confirma la disponibilidad.
+            </p>
+            <div className="mt-8 space-y-4 text-sm leading-7 text-muted">
+              <p>Confirmacion simple para no frenar conversiones.</p>
+              <p>Informacion centralizada para ordenar turnos y seguimiento.</p>
+              <p>Base lista para sumar panel admin y estados mas adelante.</p>
+            </div>
+          </article>
+
+          <article className="rounded-[2rem] border border-border bg-surface p-8">
+            <p className="text-sm uppercase tracking-[0.3em] text-accent-soft">
+              Formulario de solicitud
+            </p>
+            <div className="mt-6">
+              <BookingRequestForm
+                services={featuredServices}
+                stylists={stylists}
+              />
             </div>
           </article>
         </section>
