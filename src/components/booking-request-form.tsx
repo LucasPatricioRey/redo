@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 type ServiceOption = {
   name: string;
@@ -28,6 +28,15 @@ type FormState = {
   notes: string;
 };
 
+type AvailableSlotDay = {
+  date: string;
+  label: string;
+  slots: {
+    value: string;
+    label: string;
+  }[];
+};
+
 const initialFormState: FormState = {
   clientName: "",
   clientEmail: "",
@@ -45,11 +54,78 @@ export function BookingRequestForm({
   const [formState, setFormState] = useState<FormState>(initialFormState);
   const [serverMessage, setServerMessage] = useState<string>("");
   const [serverError, setServerError] = useState<string>("");
+  const [availableDays, setAvailableDays] = useState<AvailableSlotDay[]>([]);
+  const [isLoadingAvailability, setIsLoadingAvailability] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   function updateField<K extends keyof FormState>(field: K, value: FormState[K]) {
     setFormState((current) => ({ ...current, [field]: value }));
   }
+
+  function updateService(value: string) {
+    setServerError("");
+    setFormState((current) => ({
+      ...current,
+      requestedService: value,
+      preferredDate: "",
+    }));
+  }
+
+  function updateStylist(value: string) {
+    setServerError("");
+    setFormState((current) => ({
+      ...current,
+      preferredStylist: value,
+      preferredDate: "",
+    }));
+  }
+
+  useEffect(() => {
+    async function loadAvailability() {
+      if (!formState.requestedService) {
+        setAvailableDays([]);
+        return;
+      }
+
+      setIsLoadingAvailability(true);
+
+      try {
+        const params = new URLSearchParams({
+          service: formState.requestedService,
+        });
+
+        if (formState.preferredStylist) {
+          params.set("stylist", formState.preferredStylist);
+        }
+
+        const response = await fetch(`/api/availability?${params.toString()}`, {
+          cache: "no-store",
+        });
+
+        const result = (await response.json()) as {
+          days?: AvailableSlotDay[];
+          message?: string;
+        };
+
+        if (!response.ok) {
+          setServerError(
+            result.message || "No se pudo consultar la disponibilidad.",
+          );
+          setAvailableDays([]);
+          return;
+        }
+
+        setAvailableDays(result.days || []);
+      } catch {
+        setServerError("No se pudo cargar la disponibilidad en este momento.");
+        setAvailableDays([]);
+      } finally {
+        setIsLoadingAvailability(false);
+      }
+    }
+
+    void loadAvailability();
+  }, [formState.requestedService, formState.preferredStylist]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -60,9 +136,7 @@ export function BookingRequestForm({
       try {
         const payload = {
           ...formState,
-          preferredDate: formState.preferredDate
-            ? new Date(formState.preferredDate).toISOString()
-            : undefined,
+          preferredDate: formState.preferredDate,
           preferredStylist: formState.preferredStylist || undefined,
           notes: formState.notes.trim() || undefined,
         };
@@ -89,6 +163,7 @@ export function BookingRequestForm({
             "Solicitud enviada. REDO se va a contactar para confirmar el turno.",
         );
         setFormState(initialFormState);
+        setAvailableDays([]);
       } catch {
         setServerError("Ocurrio un error de conexion. Intenta nuevamente.");
       }
@@ -137,9 +212,7 @@ export function BookingRequestForm({
           <select
             required
             value={formState.requestedService}
-            onChange={(event) =>
-              updateField("requestedService", event.target.value)
-            }
+            onChange={(event) => updateService(event.target.value)}
             className="h-12 rounded-2xl border border-border bg-surface-strong px-4 text-foreground outline-none transition-colors focus:border-accent"
           >
             <option value="">Seleccionar servicio</option>
@@ -152,24 +225,10 @@ export function BookingRequestForm({
         </label>
 
         <label className="grid gap-2 text-sm text-muted">
-          Fecha y horario preferido
-          <input
-            type="datetime-local"
-            value={formState.preferredDate}
-            onChange={(event) =>
-              updateField("preferredDate", event.target.value)
-            }
-            className="h-12 rounded-2xl border border-border bg-surface-strong px-4 text-foreground outline-none transition-colors focus:border-accent"
-          />
-        </label>
-
-        <label className="grid gap-2 text-sm text-muted">
           Profesional preferido
           <select
             value={formState.preferredStylist}
-            onChange={(event) =>
-              updateField("preferredStylist", event.target.value)
-            }
+            onChange={(event) => updateStylist(event.target.value)}
             className="h-12 rounded-2xl border border-border bg-surface-strong px-4 text-foreground outline-none transition-colors focus:border-accent"
           >
             <option value="">Sin preferencia</option>
@@ -180,7 +239,41 @@ export function BookingRequestForm({
             ))}
           </select>
         </label>
+
+        <label className="grid gap-2 text-sm text-muted">
+          Disponibilidad real
+          <select
+            required
+            value={formState.preferredDate}
+            onChange={(event) =>
+              updateField("preferredDate", event.target.value)
+            }
+            className="h-12 rounded-2xl border border-border bg-surface-strong px-4 text-foreground outline-none transition-colors focus:border-accent"
+            disabled={!formState.requestedService || isLoadingAvailability}
+          >
+            <option value="">
+              {isLoadingAvailability
+                ? "Cargando horarios..."
+                : "Seleccionar dia y horario"}
+            </option>
+            {availableDays.map((day) =>
+              day.slots.map((slot) => (
+                <option key={slot.value} value={slot.value}>
+                  {day.label} · {slot.label}
+                </option>
+              )),
+            )}
+          </select>
+        </label>
       </div>
+
+      {!isLoadingAvailability &&
+      formState.requestedService &&
+      availableDays.length === 0 ? (
+        <p className="text-sm text-red-300">
+          No hay horarios disponibles para esa combinacion por el momento.
+        </p>
+      ) : null}
 
       <label className="grid gap-2 text-sm text-muted">
         Comentarios
@@ -203,7 +296,7 @@ export function BookingRequestForm({
 
         <button
           type="submit"
-          disabled={isPending}
+          disabled={isPending || !formState.preferredDate}
           className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-[#1b1510] transition-transform duration-200 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
         >
           {isPending ? "Enviando..." : "Solicitar turno"}

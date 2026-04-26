@@ -39,6 +39,11 @@ export type BookingOverview = {
   cancelled: number;
 };
 
+type ListBookingInquiriesFilters = {
+  status?: BookingStatus;
+  query?: string;
+};
+
 const COLLECTION_NAME = "booking_inquiries";
 
 function serializeBooking(document: BookingInquiryDocument): BookingInquiry {
@@ -83,12 +88,39 @@ export async function createBookingInquiry(
   };
 }
 
-export async function listBookingInquiries() {
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function buildBookingQuery(filters?: ListBookingInquiriesFilters) {
+  const query: Record<string, unknown> = {};
+
+  if (filters?.status) {
+    query.status = filters.status;
+  }
+
+  if (filters?.query?.trim()) {
+    const search = new RegExp(escapeRegExp(filters.query.trim()), "i");
+
+    query.$or = [
+      { clientName: search },
+      { clientEmail: search },
+      { clientPhone: search },
+      { requestedService: search },
+      { preferredStylist: search },
+    ];
+  }
+
+  return query;
+}
+
+export async function listBookingInquiries(filters?: ListBookingInquiriesFilters) {
   const db = await getMongoDb();
+  const query = buildBookingQuery(filters);
 
   const bookings = await db
     .collection<BookingInquiryDocument>(COLLECTION_NAME)
-    .find()
+    .find(query)
     .sort({ createdAt: -1 })
     .toArray();
 
@@ -140,4 +172,21 @@ export async function updateBookingInquiryStatus(
   }
 
   return serializeBooking(result);
+}
+
+export async function listActiveBookingsBetween(start: Date, end: Date) {
+  const db = await getMongoDb();
+
+  const bookings = await db
+    .collection<BookingInquiryDocument>(COLLECTION_NAME)
+    .find({
+      status: { $in: ["pending", "confirmed"] },
+      preferredDate: {
+        $gte: start,
+        $lt: end,
+      },
+    })
+    .toArray();
+
+  return bookings.map(serializeBooking);
 }

@@ -18,6 +18,7 @@ export const featuredServices = [
     name: "Signature Cut",
     description:
       "Corte personalizado con asesoria de estilo, lavado y acabado profesional.",
+    durationMinutes: 45,
     duration: "45 min",
     price: "$18.000",
   },
@@ -25,6 +26,7 @@ export const featuredServices = [
     name: "Beard Design",
     description:
       "Perfilado tecnico de barba, navaja de precision y tratamiento calmante.",
+    durationMinutes: 30,
     duration: "30 min",
     price: "$12.000",
   },
@@ -32,6 +34,7 @@ export const featuredServices = [
     name: "Full Redo Experience",
     description:
       "Corte, barba, toalla caliente y puesta a punto completa para una imagen impecable.",
+    durationMinutes: 75,
     duration: "75 min",
     price: "$27.000",
   },
@@ -82,4 +85,13 @@ export const roadmap = {
     "Recordatorios por email o WhatsApp.",
     "Metricas basicas de ocupacion y servicios mas pedidos.",
   ],
+} as const;
+
+export const weeklyAvailability = {
+  1: { startHour: 10, endHour: 20 },
+  2: { startHour: 10, endHour: 20 },
+  3: { startHour: 10, endHour: 20 },
+  4: { startHour: 10, endHour: 20 },
+  5: { startHour: 10, endHour: 20 },
+  6: { startHour: 10, endHour: 19 },
 } as const;
