@@ -2,7 +2,7 @@ export const studioInfo = {
   name: "REDO Studio",
   city: "Buenos Aires",
   address: "Honduras 4872, Palermo",
-  phone: "+54 11 3928 2201",
+  phone: "+54 9 11 5409 7209",
   schedule: {
     monday: { enabled: true, open: "10:00", close: "20:00" },
     tuesday: { enabled: true, open: "10:00", close: "20:00" },
