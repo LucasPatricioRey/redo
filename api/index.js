@@ -61,10 +61,30 @@ app.get("/api/availability", async (request, response) => {
 });
 
 app.post("/api/bookings", async (request, response) => {
-  const { customerName, customerPhone, serviceSlug, barberSlug, date, time, notes } = request.body;
+  const customerName = String(request.body.customerName || "").trim();
+  const customerPhone = String(request.body.customerPhone || "").trim();
+  const serviceSlug = String(request.body.serviceSlug || "").trim();
+  const barberSlug = String(request.body.barberSlug || "").trim();
+  const date = String(request.body.date || "").trim();
+  const time = String(request.body.time || "").trim();
+  const notes = String(request.body.notes || "").trim();
 
   if (!customerName || !customerPhone || !serviceSlug || !barberSlug || !date || !time) {
     response.status(400).json({ message: "Completa todos los campos obligatorios" });
+    return;
+  }
+
+  if (customerPhone.replace(/\D/g, "").length < 8) {
+    response.status(400).json({ message: "Ingresa un telefono valido" });
+    return;
+  }
+
+  const selectedDate = new Date(`${date}T00:00:00`);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  if (selectedDate < today) {
+    response.status(400).json({ message: "No se pueden reservar fechas pasadas" });
     return;
   }
 

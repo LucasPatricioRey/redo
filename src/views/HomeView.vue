@@ -113,7 +113,42 @@
       </article>
 
       <article class="content-card aside-card">
-        <p class="eyebrow">Experiencia</p>
+        <p class="eyebrow">Resumen de turno</p>
+        <h2>Informacion antes de confirmar</h2>
+        <div class="summary-card">
+          <div class="summary-row">
+            <span>Servicio</span>
+            <strong>{{ selectedService?.name || "Seleccionar" }}</strong>
+          </div>
+          <div class="summary-row">
+            <span>Profesional</span>
+            <strong>{{ selectedBarber?.name || "Seleccionar" }}</strong>
+          </div>
+          <div class="summary-row">
+            <span>Duracion</span>
+            <strong>{{ selectedService ? `${selectedService.duration} min` : "-" }}</strong>
+          </div>
+          <div class="summary-row">
+            <span>Valor estimado</span>
+            <strong>{{ selectedService ? `$${selectedService.price.toLocaleString("es-AR")}` : "-" }}</strong>
+          </div>
+          <div class="summary-row">
+            <span>Direccion</span>
+            <strong>{{ studioInfo.address }}</strong>
+          </div>
+        </div>
+
+        <div class="schedule-card">
+          <p class="eyebrow">Horarios de atencion</p>
+          <ul class="schedule-list">
+            <li v-for="item in scheduleItems" :key="item.label">
+              <span>{{ item.label }}</span>
+              <strong>{{ item.value }}</strong>
+            </li>
+          </ul>
+        </div>
+
+        <p class="eyebrow testimonial-eyebrow">Experiencia</p>
         <h2>Lo que esperan los clientes habituales</h2>
         <div class="testimonial-list">
           <blockquote v-for="item in testimonials" :key="item.name" class="testimonial-item">
@@ -153,6 +188,20 @@ const minimumDate = computed(() => {
   return today.toISOString().split("T")[0];
 });
 
+const selectedService = computed(() =>
+  services.find((service) => service.slug === form.serviceSlug)
+);
+
+const selectedBarber = computed(() =>
+  barbers.find((barber) => barber.slug === form.barberSlug)
+);
+
+const scheduleItems = [
+  { label: "Lunes a viernes", value: "10:00 a 20:00" },
+  { label: "Sabados", value: "10:00 a 18:00" },
+  { label: "Domingos", value: "Cerrado" },
+];
+
 watch(
   () => [form.serviceSlug, form.barberSlug, form.date],
   async ([serviceSlug, barberSlug, date]) => {
@@ -191,7 +240,14 @@ async function submitBooking() {
   submitting.value = true;
 
   try {
-    const { data } = await api.post("/bookings", form);
+    const payload = {
+      ...form,
+      customerName: form.customerName.trim(),
+      customerPhone: form.customerPhone.trim(),
+      notes: form.notes.trim(),
+    };
+
+    const { data } = await api.post("/bookings", payload);
     successMessage.value = `${data.message} Te esperamos para confirmar los detalles del turno.`;
     Object.assign(form, {
       customerName: "",
