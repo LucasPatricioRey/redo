@@ -159,6 +159,7 @@ const submitting = ref(false);
 const errorMessage = ref("");
 const successMessage = ref("");
 const reservationSummary = ref(null);
+const resettingAfterSubmit = ref(false);
 const slotsMessage = ref("Selecciona servicio, profesional y fecha para ver horarios reales.");
 
 const minimumDate = computed(() => {
@@ -196,9 +197,12 @@ watch(
   async ([serviceSlug, barberSlug, date]) => {
     form.time = "";
     availableSlots.value = [];
-    successMessage.value = "";
     errorMessage.value = "";
-    reservationSummary.value = null;
+
+    if (!resettingAfterSubmit.value) {
+      successMessage.value = "";
+      reservationSummary.value = null;
+    }
 
     if (!serviceSlug || !barberSlug || !date) {
       slotsMessage.value = "Selecciona servicio, profesional y fecha para ver horarios reales.";
@@ -247,6 +251,7 @@ async function submitBooking() {
       date: payload.date,
       time: payload.time,
     };
+    resettingAfterSubmit.value = true;
     Object.assign(form, {
       customerName: "",
       customerPhone: "",
@@ -258,6 +263,10 @@ async function submitBooking() {
     });
     availableSlots.value = [];
     slotsMessage.value = "Selecciona servicio, profesional y fecha para ver horarios reales.";
+    window.open(whatsappLink.value, "_blank", "noopener,noreferrer");
+    setTimeout(() => {
+      resettingAfterSubmit.value = false;
+    }, 0);
   } catch (error) {
     errorMessage.value = error.response?.data?.message || "No pudimos registrar la reserva";
   } finally {
