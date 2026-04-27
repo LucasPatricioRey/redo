@@ -1,37 +1,90 @@
 <template>
-  <main class="page-shell">
-    <section class="hero">
+  <main class="page-shell page-shell--home">
+    <section class="hero hero--showcase">
       <div class="hero__copy">
         <p class="eyebrow">Barberia y estudio de imagen</p>
         <h1>REDO Studio</h1>
         <p class="hero__lead">
           Cortes, barba y asesoramiento personal en un espacio donde la experiencia empieza antes
-          de llegar. Reservas claras, horarios reales y un equipo enfocado en el detalle.
+          de llegar. Reservas claras, horarios reales y una atencion que se siente cuidada de
+          punta a punta.
         </p>
-        <div class="hero__meta">
+        <div class="hero__meta hero__meta--stack">
           <span>{{ studioInfo.address }}</span>
           <span>{{ studioInfo.phone }}</span>
+          <span>Agenda activa de lunes a sabado</span>
+        </div>
+        <div class="hero__actions">
+          <a class="hero__link" href="#reserva">Reservar ahora</a>
+          <span class="hero__note">Atencion con agenda confirmada y horarios actualizados.</span>
         </div>
       </div>
-      <div class="hero__card">
-        <p class="hero__label">Turnos online</p>
-        <p class="hero__value">Reservas con disponibilidad real por profesional y horario.</p>
-        <span class="hero__note">Atencion con agenda confirmada y horarios actualizados.</span>
+
+      <div class="showcase-panel">
+        <div class="showcase-panel__frame">
+          <transition name="fade-slide" mode="out-in">
+            <img
+              :key="activeSlide.image"
+              :src="activeSlide.image"
+              :alt="activeSlide.title"
+              class="showcase-panel__image"
+            />
+          </transition>
+          <div class="showcase-panel__overlay">
+            <p class="showcase-panel__eyebrow">{{ activeSlide.eyebrow }}</p>
+            <h2>{{ activeSlide.title }}</h2>
+            <p>{{ activeSlide.description }}</p>
+          </div>
+        </div>
+
+        <div class="showcase-panel__controls">
+          <button class="carousel-button" type="button" @click="previousSlide">Anterior</button>
+          <div class="carousel-dots">
+            <button
+              v-for="(slide, index) in slides"
+              :key="slide.image"
+              class="carousel-dot"
+              :class="{ 'carousel-dot--active': index === activeSlideIndex }"
+              type="button"
+              @click="setSlide(index)"
+            ></button>
+          </div>
+          <button class="carousel-button" type="button" @click="nextSlide">Siguiente</button>
+        </div>
       </div>
     </section>
 
-    <section class="content-grid">
-      <article class="content-card">
+    <section class="feature-strip">
+      <article class="feature-strip__item">
+        <span>Disponibilidad real</span>
+        <strong>Turnos por profesional</strong>
+      </article>
+      <article class="feature-strip__item">
+        <span>Atencion personalizada</span>
+        <strong>Experiencia premium y simple</strong>
+      </article>
+      <article class="feature-strip__item">
+        <span>Contacto directo</span>
+        <strong>Confirmacion inmediata por WhatsApp</strong>
+      </article>
+    </section>
+
+    <section class="content-grid content-grid--home">
+      <article class="content-card content-card--spotlight">
         <p class="eyebrow">Servicios</p>
-        <h2>Una propuesta simple y profesional</h2>
+        <h2>Una propuesta precisa y actual</h2>
+        <p class="section-helper">
+          Cada servicio esta pensado para resolver una necesidad concreta, con tiempos reales y una
+          experiencia consistente desde la reserva hasta la visita.
+        </p>
         <p v-if="catalogLoading">Cargando servicios...</p>
         <div v-else class="service-list">
-          <div v-for="service in services" :key="service.slug" class="service-item">
+          <div v-for="service in services" :key="service.slug" class="service-item service-item--visual">
             <div>
               <h3>{{ service.name }}</h3>
               <p>{{ service.description }}</p>
             </div>
-            <div class="service-item__meta">
+            <div class="service-item__meta service-item__meta--accent">
               <span>{{ service.duration }} min</span>
               <strong>${{ Number(service.price).toLocaleString("es-AR") }}</strong>
             </div>
@@ -39,24 +92,37 @@
         </div>
       </article>
 
-      <article class="content-card">
+      <article class="content-card content-card--team">
         <p class="eyebrow">Equipo</p>
-        <h2>Profesionales con agenda y especialidades definidas</h2>
+        <h2>Profesionales con estilo propio</h2>
+        <p class="section-helper">
+          Un equipo chico, claro y con especialidades definidas para que la reserva tenga sentido
+          real desde el primer clic.
+        </p>
         <p v-if="catalogLoading">Cargando profesionales...</p>
         <div v-else class="team-list">
-          <div v-for="barber in barbers" :key="barber.slug" class="team-item">
-            <h3>{{ barber.name }}</h3>
-            <p>{{ barber.role }}</p>
-            <small>{{ (barber.specialties || []).join(" - ") }}</small>
+          <div v-for="barber in barbers" :key="barber.slug" class="team-item team-item--visual">
+            <div class="team-item__badge">{{ barber.name.charAt(0) }}</div>
+            <div>
+              <h3>{{ barber.name }}</h3>
+              <p>{{ barber.role }}</p>
+              <small>{{ (barber.specialties || []).join(" - ") }}</small>
+            </div>
           </div>
         </div>
       </article>
     </section>
 
-    <section class="booking-section">
-      <article class="content-card booking-card">
-        <p class="eyebrow">Reserva online</p>
-        <h2>Solicitar turno</h2>
+    <section id="reserva" class="booking-layout booking-layout--home">
+      <article class="content-card booking-card booking-card--featured">
+        <div class="booking-card__head">
+          <div>
+            <p class="eyebrow">Reserva online</p>
+            <h2>Solicitar turno</h2>
+          </div>
+          <span class="booking-card__chip">Agenda en tiempo real</span>
+        </div>
+
         <form class="booking-form" @submit.prevent="submitBooking">
           <div class="form-grid">
             <label>
@@ -101,6 +167,7 @@
               </select>
             </label>
           </div>
+
           <label>
             Comentarios
             <textarea
@@ -109,11 +176,16 @@
               placeholder="Ejemplo: primer visita o preferencia de estilo"
             ></textarea>
           </label>
-          <p v-if="slotsMessage" class="form-helper">{{ slotsMessage }}</p>
-          <p v-if="errorMessage" class="form-error">{{ errorMessage }}</p>
-          <button :disabled="submitting || catalogLoading" type="submit">
-            {{ submitting ? "Enviando reserva..." : "Confirmar solicitud" }}
-          </button>
+
+          <div class="booking-card__footer">
+            <div class="booking-card__messages">
+              <p v-if="slotsMessage" class="form-helper">{{ slotsMessage }}</p>
+              <p v-if="errorMessage" class="form-error">{{ errorMessage }}</p>
+            </div>
+            <button :disabled="submitting || catalogLoading" type="submit">
+              {{ submitting ? "Enviando reserva..." : "Confirmar solicitud" }}
+            </button>
+          </div>
         </form>
 
         <div v-if="reservationSummary" class="success-card">
@@ -131,14 +203,57 @@
           </a>
         </div>
       </article>
+
+      <aside class="content-card ambiance-card">
+        <p class="eyebrow">Atmosfera</p>
+        <h2>Un look que ya transmite negocio real</h2>
+        <p class="section-helper">
+          Por ahora estas imagenes acompañan la fachada del proyecto. Mas adelante las cambiamos por
+          fotos reales del local para cerrar una presencia mucho mas autentica.
+        </p>
+        <div class="ambiance-card__stack">
+          <img
+            src="https://images.pexels.com/photos/19225277/pexels-photo-19225277.jpeg?auto=compress&cs=tinysrgb&w=1200"
+            alt="Sillon de barberia moderno"
+          />
+          <img
+            src="https://images.pexels.com/photos/7518689/pexels-photo-7518689.jpeg?auto=compress&cs=tinysrgb&w=1200"
+            alt="Cliente en barberia"
+          />
+        </div>
+      </aside>
     </section>
   </main>
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, reactive, ref, watch } from "vue";
 import { api } from "../utils/api.js";
 import { studioInfo } from "../../shared/site.js";
+
+const slides = [
+  {
+    eyebrow: "Pexels",
+    title: "Interior con caracter",
+    description: "Una atmosfera sobria, cuidada y lista para proyectar confianza desde la primera vista.",
+    image: "https://images.pexels.com/photos/19225277/pexels-photo-19225277.jpeg?auto=compress&cs=tinysrgb&w=1600",
+  },
+  {
+    eyebrow: "Pexels",
+    title: "Trabajo en detalle",
+    description: "La precision del oficio convertida en una portada mucho mas viva para el proyecto.",
+    image: "https://images.pexels.com/photos/14011984/pexels-photo-14011984.jpeg?auto=compress&cs=tinysrgb&w=1600",
+  },
+  {
+    eyebrow: "Pexels",
+    title: "Experiencia de cliente",
+    description: "Una imagen mas humana para mostrar reserva, servicio y ambiente en una sola escena.",
+    image: "https://images.pexels.com/photos/7518689/pexels-photo-7518689.jpeg?auto=compress&cs=tinysrgb&w=1600",
+  },
+];
+
+const activeSlideIndex = ref(0);
+let carouselInterval = null;
 
 const services = ref([]);
 const barbers = ref([]);
@@ -162,6 +277,8 @@ const reservationSummary = ref(null);
 const resettingAfterSubmit = ref(false);
 const slotsMessage = ref("Selecciona servicio, profesional y fecha para ver horarios reales.");
 
+const activeSlide = computed(() => slides[activeSlideIndex.value]);
+
 const minimumDate = computed(() => {
   const today = new Date();
   return today.toISOString().split("T")[0];
@@ -179,6 +296,30 @@ const whatsappLink = computed(() => {
 
   return `https://wa.me/${phone}?text=${message}`;
 });
+
+function setSlide(index) {
+  activeSlideIndex.value = index;
+}
+
+function nextSlide() {
+  activeSlideIndex.value = (activeSlideIndex.value + 1) % slides.length;
+}
+
+function previousSlide() {
+  activeSlideIndex.value = (activeSlideIndex.value - 1 + slides.length) % slides.length;
+}
+
+function startCarousel() {
+  carouselInterval = window.setInterval(() => {
+    nextSlide();
+  }, 4500);
+}
+
+function stopCarousel() {
+  if (carouselInterval) {
+    window.clearInterval(carouselInterval);
+  }
+}
 
 async function fetchCatalog() {
   catalogLoading.value = true;
@@ -274,5 +415,12 @@ async function submitBooking() {
   }
 }
 
-onMounted(fetchCatalog);
+onMounted(() => {
+  fetchCatalog();
+  startCarousel();
+});
+
+onUnmounted(() => {
+  stopCarousel();
+});
 </script>
