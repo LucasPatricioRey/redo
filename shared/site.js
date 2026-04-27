@@ -1,7 +1,7 @@
 export const studioInfo = {
-  name: "REDO Studio",
+  name: "REDO",
   city: "Buenos Aires",
-  address: "Honduras 4872, Palermo",
+  address: "Bolaños 229, Floresta",
   phone: "+54 9 11 5409 7209",
   schedule: {
     monday: { enabled: true, open: "10:00", close: "20:00" },
@@ -17,24 +17,52 @@ export const studioInfo = {
 export const services = [
   {
     slug: "corte-signature",
-    name: "Corte Signature",
+    name: "Corte de diseño",
     description: "Corte personalizado con asesoramiento de estilo y terminacion precisa.",
     duration: 60,
     price: 18000,
   },
   {
     slug: "barba-premium",
-    name: "Barba Premium",
+    name: "Barba y perfilado",
     description: "Perfilado, toalla caliente y definicion pensada para cada tipo de rostro.",
     duration: 45,
     price: 14000,
   },
   {
     slug: "combo-completo",
-    name: "Combo Completo",
+    name: "Combo corte y barba",
     description: "Corte, barba y terminaciones para quienes buscan una puesta a punto integral.",
     duration: 90,
     price: 26000,
+  },
+  {
+    slug: "brushing-pro",
+    name: "Brushing profesional",
+    description: "Peinado con brushing para dar forma, brillo y terminacion prolija.",
+    duration: 50,
+    price: 16000,
+  },
+  {
+    slug: "tintura-global",
+    name: "Tintura global",
+    description: "Coloracion completa con diagnostico previo y definicion de tono.",
+    duration: 120,
+    price: 42000,
+  },
+  {
+    slug: "balayage-soft",
+    name: "Balayage soft",
+    description: "Iluminacion suave para aportar contraste y movimiento con acabado natural.",
+    duration: 180,
+    price: 68000,
+  },
+  {
+    slug: "nutricion-capilar",
+    name: "Nutricion capilar",
+    description: "Tratamiento de hidratacion profunda para recuperar textura y brillo.",
+    duration: 55,
+    price: 22000,
   },
 ];
 

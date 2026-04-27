@@ -34,10 +34,26 @@ async function seedDefaults() {
 
   if ((await db.collection(collections.services).countDocuments()) === 0) {
     await db.collection(collections.services).insertMany(defaultServices);
+  } else {
+    for (const service of defaultServices) {
+      const existing = await db.collection(collections.services).findOne({ slug: service.slug });
+
+      if (!existing) {
+        await db.collection(collections.services).insertOne(service);
+      }
+    }
   }
 
   if ((await db.collection(collections.barbers).countDocuments()) === 0) {
     await db.collection(collections.barbers).insertMany(defaultBarbers);
+  } else {
+    for (const barber of defaultBarbers) {
+      const existing = await db.collection(collections.barbers).findOne({ slug: barber.slug });
+
+      if (!existing) {
+        await db.collection(collections.barbers).insertOne(barber);
+      }
+    }
   }
 
   if ((await db.collection(collections.settings).countDocuments({ key: "schedule" })) === 0) {
