@@ -4,14 +4,13 @@
       <div class="hero__copy">
         <div class="hero__brand-mark">
           <span>REDO</span>
-          <small>Studio de corte y barba</small>
+          <small>Corte, color y estilo</small>
         </div>
-        <p class="eyebrow">Barberia y estudio de imagen</p>
-        <h1>REDO Studio</h1>
+        <p class="eyebrow">Peluqueria y barberia unisex</p>
+        <h1>REDO</h1>
         <p class="hero__lead">
-          Cortes, barba y asesoramiento personal en un espacio donde la experiencia empieza antes
-          de llegar. Reservas claras, horarios reales y una atencion que se siente cuidada de
-          punta a punta.
+          Una peluqueria unisex con mirada actual: cortes limpios, color, tratamientos y reservas
+          claras para que la experiencia sea simple, prolija y real desde el primer clic.
         </p>
         <div class="hero__meta hero__meta--stack">
           <span>{{ studioInfo.address }}</span>
@@ -20,7 +19,7 @@
         </div>
         <div class="hero__actions">
           <a class="hero__link" href="#reserva">Reservar ahora</a>
-          <span class="hero__note">Atencion con agenda confirmada y horarios actualizados.</span>
+          <span class="hero__note">Estetica unisex con agenda online y confirmacion por WhatsApp.</span>
         </div>
       </div>
 
@@ -59,27 +58,27 @@
     </section>
 
     <section class="feature-strip">
-      <article class="feature-strip__item">
-        <span>Disponibilidad real</span>
-        <strong>Turnos por profesional</strong>
+      <article class="feature-strip__item feature-strip__item--accent">
+        <span>Marca REDO</span>
+        <strong>Imagen urbana, agenda prolija y experiencia directa</strong>
       </article>
       <article class="feature-strip__item">
-        <span>Atencion personalizada</span>
-        <strong>Experiencia premium y simple</strong>
+        <span>Servicios unisex</span>
+        <strong>Corte, color, brushing y tratamientos</strong>
       </article>
       <article class="feature-strip__item">
-        <span>Contacto directo</span>
-        <strong>Confirmacion inmediata por WhatsApp</strong>
+        <span>Reserva moderna</span>
+        <strong>Turnos reales con confirmacion por WhatsApp</strong>
       </article>
     </section>
 
     <section class="content-grid content-grid--home">
       <article class="content-card content-card--spotlight">
         <p class="eyebrow">Servicios</p>
-        <h2>Una propuesta precisa y actual</h2>
+        <h2>Una carta pensada para un publico mas amplio</h2>
         <p class="section-helper">
-          Cada servicio esta pensado para resolver una necesidad concreta, con tiempos reales y una
-          experiencia consistente desde la reserva hasta la visita.
+          REDO combina barberia, peluqueria y color en una sola propuesta. La idea es que la
+          fachada ya se sienta usable para un negocio real y no solo como una demo.
         </p>
         <p v-if="catalogLoading">Cargando servicios...</p>
         <div v-else class="service-list">
@@ -98,10 +97,10 @@
 
       <article class="content-card content-card--team">
         <p class="eyebrow">Equipo</p>
-        <h2>Profesionales con estilo propio</h2>
+        <h2>Perfiles definidos, look contemporaneo</h2>
         <p class="section-helper">
-          Un equipo chico, claro y con especialidades definidas para que la reserva tenga sentido
-          real desde el primer clic.
+          Un equipo chico y claro, con especialidades que le dan sentido a la reserva online y al
+          tono visual general del sitio.
         </p>
         <p v-if="catalogLoading">Cargando profesionales...</p>
         <div v-else class="team-list">
@@ -115,6 +114,12 @@
           </div>
         </div>
       </article>
+    </section>
+
+    <section class="gallery-band">
+      <div v-for="image in galleryImages" :key="image.src" class="gallery-band__item">
+        <img :src="image.src" :alt="image.alt" />
+      </div>
     </section>
 
     <section id="reserva" class="booking-layout booking-layout--home">
@@ -177,7 +182,7 @@
             <textarea
               v-model="form.notes"
               rows="4"
-              placeholder="Ejemplo: primer visita o preferencia de estilo"
+              placeholder="Ejemplo: primera visita, cambio de look o preferencia de estilo"
             ></textarea>
           </label>
 
@@ -209,20 +214,28 @@
       </article>
 
       <aside class="content-card ambiance-card">
-        <p class="eyebrow">Atmosfera</p>
-        <h2>Un look que ya transmite negocio real</h2>
+        <p class="eyebrow">Fachada visual</p>
+        <h2>Mas imagenes para vender mejor el concepto</h2>
         <p class="section-helper">
-          Por ahora estas imagenes acompañan la fachada del proyecto. Mas adelante las cambiamos por
-          fotos reales del local para cerrar una presencia mucho mas autentica.
+          Estas imagenes siguen siendo de apoyo, pero ahora construyen una fachada mas completa para
+          REDO mientras despues definimos fotos reales del local.
         </p>
-        <div class="ambiance-card__stack">
+        <div class="ambiance-card__stack ambiance-card__stack--grid">
           <img
             src="https://images.pexels.com/photos/19225277/pexels-photo-19225277.jpeg?auto=compress&cs=tinysrgb&w=1200"
             alt="Sillon de barberia moderno"
           />
           <img
             src="https://images.pexels.com/photos/7518689/pexels-photo-7518689.jpeg?auto=compress&cs=tinysrgb&w=1200"
-            alt="Cliente en barberia"
+            alt="Cliente en peluqueria"
+          />
+          <img
+            src="https://images.pexels.com/photos/9341769/pexels-photo-9341769.jpeg?auto=compress&cs=tinysrgb&w=1200"
+            alt="Trabajo de barberia"
+          />
+          <img
+            src="https://images.pexels.com/photos/18483780/pexels-photo-18483780.jpeg?auto=compress&cs=tinysrgb&w=1200"
+            alt="Silla de peluqueria"
           />
         </div>
       </aside>
@@ -238,21 +251,48 @@ import { studioInfo } from "../../shared/site.js";
 const slides = [
   {
     eyebrow: "Pexels",
-    title: "Interior con caracter",
-    description: "Una atmosfera sobria, cuidada y lista para proyectar confianza desde la primera vista.",
+    title: "Textura, luz y caracter",
+    description: "Una portada mas urbana y visual para que REDO empiece a sentirse como una marca propia.",
     image: "https://images.pexels.com/photos/19225277/pexels-photo-19225277.jpeg?auto=compress&cs=tinysrgb&w=1600",
   },
   {
     eyebrow: "Pexels",
-    title: "Trabajo en detalle",
-    description: "La precision del oficio convertida en una portada mucho mas viva para el proyecto.",
+    title: "Color y movimiento",
+    description: "El lado peluqueria de REDO tambien entra en escena: color, estilo y cambio de look.",
+    image: "https://images.pexels.com/photos/18483780/pexels-photo-18483780.jpeg?auto=compress&cs=tinysrgb&w=1600",
+  },
+  {
+    eyebrow: "Pexels",
+    title: "Precision de corte",
+    description: "Una imagen mas cercana al oficio para que la experiencia no sea solo decorativa.",
     image: "https://images.pexels.com/photos/14011984/pexels-photo-14011984.jpeg?auto=compress&cs=tinysrgb&w=1600",
   },
   {
     eyebrow: "Pexels",
-    title: "Experiencia de cliente",
-    description: "Una imagen mas humana para mostrar reserva, servicio y ambiente en una sola escena.",
+    title: "Cliente y experiencia",
+    description: "La escena humana aporta una vibra mas real y menos showroom.",
     image: "https://images.pexels.com/photos/7518689/pexels-photo-7518689.jpeg?auto=compress&cs=tinysrgb&w=1600",
+  },
+  {
+    eyebrow: "Pexels",
+    title: "Atmosfera de estudio",
+    description: "Un cierre visual mas editorial para que REDO tenga mas presencia de marca.",
+    image: "https://images.pexels.com/photos/9341769/pexels-photo-9341769.jpeg?auto=compress&cs=tinysrgb&w=1600",
+  },
+];
+
+const galleryImages = [
+  {
+    src: "https://images.pexels.com/photos/4625616/pexels-photo-4625616.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    alt: "Cliente en silla de barberia",
+  },
+  {
+    src: "https://images.pexels.com/photos/7518687/pexels-photo-7518687.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    alt: "Interior de barberia con espejo",
+  },
+  {
+    src: "https://images.pexels.com/photos/14011984/pexels-photo-14011984.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    alt: "Trabajo de corte",
   },
 ];
 

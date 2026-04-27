@@ -75,6 +75,19 @@ img {
   pointer-events: none;
 }
 
+.page-shell--home::after {
+  content: "REDO";
+  position: absolute;
+  top: 16px;
+  right: 0;
+  font-size: clamp(5rem, 18vw, 14rem);
+  font-weight: 700;
+  line-height: 0.8;
+  letter-spacing: -0.08em;
+  color: rgba(255, 248, 240, 0.03);
+  pointer-events: none;
+}
+
 .center-shell {
   min-height: 100vh;
   display: grid;
@@ -304,6 +317,11 @@ img {
     var(--panel);
 }
 
+.feature-strip__item--accent {
+  border-color: rgba(224, 176, 124, 0.24);
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.34), inset 0 0 0 1px rgba(224, 176, 124, 0.08);
+}
+
 .feature-strip__item span {
   display: block;
   color: var(--text-muted);
@@ -530,11 +548,37 @@ img {
   gap: 16px;
 }
 
+.ambiance-card__stack--grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .ambiance-card__stack img {
   height: 240px;
   object-fit: cover;
   border-radius: 24px;
   border: 1px solid rgba(255, 248, 240, 0.1);
+}
+
+.gallery-band {
+  grid-template-columns: 1.1fr 0.9fr 1fr;
+  margin-top: 28px;
+  position: relative;
+  z-index: 1;
+}
+
+.gallery-band__item {
+  overflow: hidden;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 248, 240, 0.1);
+  background: rgba(255, 248, 240, 0.04);
+  min-height: 220px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+}
+
+.gallery-band__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .ambiance-card {
@@ -759,6 +803,7 @@ img {
   .hero--showcase,
   .feature-strip,
   .content-grid--home,
+  .gallery-band,
   .booking-layout--home,
   .stats-grid,
   .dashboard-grid,
@@ -793,6 +838,10 @@ img {
 
   .showcase-panel__overlay p {
     max-width: 100%;
+  }
+
+  .ambiance-card__stack--grid {
+    grid-template-columns: 1fr;
   }
 
   .service-item,
