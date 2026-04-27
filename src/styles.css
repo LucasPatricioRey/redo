@@ -10,9 +10,6 @@
   --sand-strong: #ebe2d8;
   --text: #1d1d1d;
   --text-soft: #545454;
-  --border: rgba(15, 15, 16, 0.08);
-  --accent: #d7c1aa;
-  --success: #2f8050;
   --danger: #ba5454;
 }
 
@@ -61,7 +58,7 @@ img {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.94);
   border-bottom: 1px solid rgba(15, 15, 16, 0.06);
   backdrop-filter: blur(10px);
 }
@@ -80,11 +77,11 @@ img {
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  min-height: 84px;
+  min-height: 76px;
 }
 
 .redo-header__brand img {
-  width: 132px;
+  width: 96px;
   height: auto;
 }
 
@@ -106,7 +103,7 @@ img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 48px;
+  min-height: 46px;
   padding: 12px 22px;
   border-radius: 999px;
   text-decoration: none;
@@ -115,16 +112,16 @@ img {
 }
 
 .redo-header__cta,
-.redo-button--primary {
+.redo-button--primary,
+.redo-button--secondary {
   background: var(--black);
   color: var(--white);
 }
 
-.redo-button--secondary,
-.redo-button--ghost {
-  background: rgba(255, 255, 255, 0.12);
-  color: var(--white);
-  border: 1px solid rgba(255, 255, 255, 0.28);
+.redo-button--outline {
+  background: transparent;
+  color: var(--black);
+  border: 1px solid rgba(15, 15, 16, 0.14);
 }
 
 .redo-button:hover,
@@ -133,30 +130,24 @@ img {
 }
 
 .redo-hero {
-  position: relative;
-  min-height: 78vh;
-  display: grid;
-  align-items: center;
+  min-height: clamp(240px, 34vw, 360px);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
 
-.redo-hero__overlay {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.5) 42%, rgba(0, 0, 0, 0.18) 100%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
+.redo-intro,
+.redo-services,
+.redo-values,
+.redo-booking {
+  padding: 72px 0 0;
 }
 
-.redo-hero__content {
-  position: relative;
-  z-index: 1;
-  width: min(1240px, calc(100% - 2rem));
-  margin: 0 auto;
-  padding: 82px 0;
-  color: var(--white);
+.redo-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.06fr);
+  gap: 42px;
+  align-items: center;
 }
 
 .redo-kicker {
@@ -167,49 +158,12 @@ img {
   text-transform: uppercase;
 }
 
-.redo-hero h1,
-.redo-section-head h2,
 .redo-intro__copy h2,
+.redo-section-head h2,
 .redo-success h3 {
   margin: 0;
   font-family: Georgia, "Times New Roman", serif;
   letter-spacing: -0.04em;
-}
-
-.redo-hero h1 {
-  max-width: 650px;
-  font-size: clamp(3.5rem, 8vw, 6.4rem);
-  line-height: 0.92;
-  text-transform: uppercase;
-}
-
-.redo-hero p:not(.redo-kicker) {
-  max-width: 520px;
-  margin: 22px 0 0;
-  font-size: 1.08rem;
-  line-height: 1.75;
-  color: rgba(255, 255, 255, 0.84);
-}
-
-.redo-hero__actions {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-  margin-top: 28px;
-}
-
-.redo-intro,
-.redo-services,
-.redo-values,
-.redo-booking {
-  padding: 88px 0 0;
-}
-
-.redo-intro {
-  display: grid;
-  grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.06fr);
-  gap: 42px;
-  align-items: center;
 }
 
 .redo-intro__copy h2,
@@ -230,17 +184,18 @@ img {
   color: var(--text-soft);
 }
 
+.redo-intro__actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
 .redo-intro__media img {
   width: 100%;
   min-height: 620px;
   object-fit: cover;
   border-radius: 28px;
-}
-
-.redo-button--secondary {
-  background: var(--black);
-  color: var(--white);
-  border: 0;
 }
 
 .redo-section-head {
@@ -255,7 +210,7 @@ img {
 
 .redo-services__grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 24px;
 }
 
@@ -267,7 +222,7 @@ img {
 
 .redo-service-card img {
   width: 100%;
-  height: 280px;
+  height: 290px;
   object-fit: cover;
 }
 
@@ -278,7 +233,7 @@ img {
 .redo-service-card__body h3,
 .redo-value-card h3 {
   margin: 0 0 12px;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: var(--text);
   text-transform: uppercase;
 }
@@ -410,8 +365,9 @@ img {
 }
 
 .redo-contact-card__logo {
-  width: 150px;
+  width: 112px;
   margin-bottom: 20px;
+  filter: brightness(0) invert(1);
 }
 
 .redo-contact-card a {
@@ -439,6 +395,12 @@ img {
   padding-left: 18px;
   display: grid;
   gap: 8px;
+}
+
+@media (max-width: 1180px) {
+  .redo-services__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 1040px) {
@@ -472,8 +434,7 @@ img {
   .redo-intro,
   .redo-services,
   .redo-values,
-  .redo-booking,
-  .redo-hero__content {
+  .redo-booking {
     width: min(100%, calc(100% - 1rem));
   }
 
@@ -483,15 +444,7 @@ img {
     font-size: 0.8rem;
   }
 
-  .redo-hero {
-    min-height: 72vh;
-  }
-
-  .redo-hero h1 {
-    font-size: 3rem;
-  }
-
-  .redo-hero__actions,
+  .redo-intro__actions,
   .redo-form__footer {
     display: grid;
   }

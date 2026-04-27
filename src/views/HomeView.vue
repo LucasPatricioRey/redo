@@ -19,21 +19,7 @@
       </div>
     </header>
 
-    <section id="inicio" class="redo-hero" :style="{ backgroundImage: `url(${redoBanner})` }">
-      <div class="redo-hero__overlay"></div>
-      <div class="redo-hero__content">
-        <p class="redo-kicker">Salon unisex en Floresta</p>
-        <h1>Peluqueria & estetica integral</h1>
-        <p>
-          Corte, color, brushing y tratamientos en un espacio pensado para una experiencia prolija,
-          cercana y actual.
-        </p>
-        <div class="redo-hero__actions">
-          <a class="redo-button redo-button--primary" href="#reserva">Solicitar turno</a>
-          <a class="redo-button redo-button--ghost" href="#servicios">Ver servicios</a>
-        </div>
-      </div>
-    </section>
+    <section id="inicio" class="redo-hero" :style="{ backgroundImage: `url(${redoBanner})` }"></section>
 
     <section id="nosotros" class="redo-intro">
       <div class="redo-intro__copy">
@@ -42,14 +28,17 @@
         <p>
           Somos REDO, un salon unisex nacido en el barrio con una propuesta que mezcla tecnica,
           diagnostico y una atencion simple de entender. Nos especializamos en corte, balayage,
-          coloracion, brushing y tratamientos pensados para realzar cada estilo sin perder naturalidad.
+          coloracion, brushing, ondas, peinados y servicios de belleza que acompanen cada momento.
         </p>
         <p>
           Nuestro equipo trabaja con una mirada actual y cercana, priorizando el estado del cabello
           antes de cada servicio y acompanando a cada cliente con recomendaciones reales para el
-          cuidado diario.
+          cuidado diario y la duracion del resultado.
         </p>
-        <a class="redo-button redo-button--secondary" href="#reserva">Reservar online</a>
+        <div class="redo-intro__actions">
+          <a class="redo-button redo-button--secondary" href="#reserva">Reservar online</a>
+          <a class="redo-button redo-button--outline" href="#servicios">Ver servicios</a>
+        </div>
       </div>
 
       <div class="redo-intro__media">
@@ -60,12 +49,12 @@
     <section id="servicios" class="redo-services">
       <div class="redo-section-head">
         <p class="redo-kicker">Servicios</p>
-        <h2>Una carta pensada para una peluqueria unisex moderna y funcional.</h2>
+        <h2>Una carta pensada para una peluqueria integral, actual y versatil.</h2>
       </div>
 
       <p v-if="catalogLoading" class="redo-state">Cargando servicios...</p>
       <div v-else class="redo-services__grid">
-        <article v-for="service in serviceCards" :key="service.slug" class="redo-service-card">
+        <article v-for="service in displayServices" :key="service.slug" class="redo-service-card">
           <img :src="service.image" :alt="service.name" />
           <div class="redo-service-card__body">
             <h3>{{ service.name }}</h3>
@@ -89,22 +78,22 @@
         <article class="redo-value-card">
           <h3>Diagnostico personalizado</h3>
           <p>
-            Antes de cada servicio evaluamos textura, base, color previo y objetivo final para
-            elegir la mejor tecnica.
+            Antes de cada servicio evaluamos base, textura y objetivo final para elegir la mejor
+            tecnica y cuidar el resultado desde el primer paso.
           </p>
         </article>
         <article class="redo-value-card">
-          <h3>Color y cuidado</h3>
+          <h3>Servicios para cada ocasion</h3>
           <p>
-            Buscamos resultados prolijos, luminosos y sostenibles en el tiempo, con foco en la
-            salud capilar y en el mantenimiento en casa.
+            Desde un corte fresco de todos los dias hasta un peinado especial o una manicuria
+            prolija para eventos, REDO acompana distintos momentos.
           </p>
         </article>
         <article class="redo-value-card">
           <h3>Reserva simple</h3>
           <p>
             La agenda online muestra disponibilidad real y permite continuar la confirmacion por
-            WhatsApp de forma directa.
+            WhatsApp de forma directa y clara.
           </p>
         </article>
       </div>
@@ -129,9 +118,9 @@
             </label>
             <label>
               Servicio
-              <select v-model="form.serviceSlug" :disabled="catalogLoading || !services.length" required>
+              <select v-model="form.serviceSlug" :disabled="catalogLoading || !displayServices.length" required>
                 <option disabled value="">Seleccionar servicio</option>
-                <option v-for="service in services" :key="service.slug" :value="service.slug">
+                <option v-for="service in displayServices" :key="service.slug" :value="service.slug">
                   {{ service.name }}
                 </option>
               </select>
@@ -167,7 +156,7 @@
             <textarea
               v-model="form.notes"
               rows="4"
-              placeholder="Contanos si queres color, brushing, un cambio de look o algun detalle importante"
+              placeholder="Contanos si queres color, brushing, mechas, un peinado especial o algun detalle importante"
             ></textarea>
           </label>
 
@@ -207,7 +196,7 @@
         <div class="redo-contact-card__services">
           <strong>Servicios destacados</strong>
           <ul>
-            <li v-for="service in footerServices" :key="service.slug">{{ service.name }}</li>
+            <li v-for="service in displayServices" :key="service.slug">{{ service.name }}</li>
           </ul>
         </div>
       </aside>
@@ -218,19 +207,28 @@
 <script setup>
 import { computed, onMounted, reactive, ref, watch } from "vue";
 import { api } from "../utils/api.js";
-import { studioInfo } from "../../shared/site.js";
+import { services as preferredServices, studioInfo } from "../../shared/site.js";
 import redoAbout from "../assets/redo-about.png";
 import redoBanner from "../assets/redo-banner.png";
-import redoLogo from "../assets/redo-logo.png";
+import redoLogo from "../assets/redo-logo-black.png";
+import serviceBalayage from "../assets/service-balayage.png";
+import serviceBrushing from "../assets/service-brushing.png";
+import serviceColor from "../assets/service-color.png";
+import serviceCorte from "../assets/service-corte.png";
+import serviceManicuria from "../assets/service-manicuria.png";
+import serviceMechas from "../assets/service-mechas.png";
+import serviceOndas from "../assets/service-ondas.png";
+import servicePeinadosEspeciales from "../assets/service-peinados-especiales.png";
 
 const serviceImageMap = {
-  "corte-signature": "https://images.pexels.com/photos/3065209/pexels-photo-3065209.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  "barba-premium": "https://images.pexels.com/photos/7697390/pexels-photo-7697390.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  "combo-completo": "https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  "brushing-pro": "https://images.pexels.com/photos/1813272/pexels-photo-1813272.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  "tintura-global": "https://images.pexels.com/photos/3993304/pexels-photo-3993304.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  "balayage-soft": redoAbout,
-  "nutricion-capilar": "https://images.pexels.com/photos/4620843/pexels-photo-4620843.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  corte: serviceCorte,
+  balayage: serviceBalayage,
+  color: serviceColor,
+  mechas: serviceMechas,
+  brushing: serviceBrushing,
+  ondas: serviceOndas,
+  "peinados-especiales": servicePeinadosEspeciales,
+  manicuria: serviceManicuria,
 };
 
 const services = ref([]);
@@ -274,14 +272,17 @@ const whatsappLink = computed(() => {
   return `${whatsappBaseLink.value}?text=${message}`;
 });
 
-const serviceCards = computed(() =>
-  services.value.map((service) => ({
-    ...service,
-    image: serviceImageMap[service.slug] || redoAbout,
-  }))
-);
+const displayServices = computed(() =>
+  preferredServices.map((preferredService) => {
+    const liveService = services.value.find((item) => item.slug === preferredService.slug);
+    const source = liveService || preferredService;
 
-const footerServices = computed(() => services.value.slice(0, 6));
+    return {
+      ...source,
+      image: serviceImageMap[preferredService.slug] || redoAbout,
+    };
+  })
+);
 
 async function fetchCatalog() {
   catalogLoading.value = true;
@@ -343,7 +344,7 @@ async function submitBooking() {
       customerPhone: form.customerPhone.trim(),
       notes: form.notes.trim(),
     };
-    const selectedService = services.value.find((item) => item.slug === payload.serviceSlug);
+    const selectedService = displayServices.value.find((item) => item.slug === payload.serviceSlug);
     const selectedBarber = barbers.value.find((item) => item.slug === payload.barberSlug);
 
     const { data } = await api.post("/bookings", payload);
