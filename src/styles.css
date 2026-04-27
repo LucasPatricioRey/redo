@@ -131,8 +131,8 @@ img {
 
 .redo-hero {
   margin-top: 12px;
-  min-height: clamp(240px, 34vw, 360px);
-  background-position: center;
+  min-height: clamp(320px, 44vw, 500px);
+  background-position: center top;
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -267,6 +267,10 @@ img {
   border-radius: 24px;
 }
 
+.redo-value-card h3 {
+  color: var(--white);
+}
+
 .redo-value-card p {
   color: rgba(255, 255, 255, 0.76);
 }
@@ -371,8 +375,13 @@ img {
   filter: brightness(0) invert(1);
 }
 
+.redo-contact-card p,
+.redo-contact-card li,
 .redo-contact-card a {
   color: var(--white);
+}
+
+.redo-contact-card a {
   text-decoration: none;
   font-weight: 600;
 }
@@ -389,6 +398,7 @@ img {
   font-size: 0.95rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+  color: var(--white);
 }
 
 .redo-contact-card__services ul {
