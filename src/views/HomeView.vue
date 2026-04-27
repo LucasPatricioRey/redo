@@ -24,7 +24,7 @@
     <section id="nosotros" class="redo-intro">
       <div class="redo-intro__copy">
         <p class="redo-kicker">Nosotros</p>
-        <h2>8 anos de trayectoria en Floresta, con foco en belleza, color y salud capilar.</h2>
+        <h2>8 años de trayectoria en Floresta, con foco en belleza, color y salud capilar.</h2>
         <p>
           Somos REDO, un salon unisex nacido en el barrio con una propuesta que mezcla tecnica,
           diagnostico y una atencion simple de entender. Nos especializamos en corte, balayage,

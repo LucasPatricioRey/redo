@@ -130,6 +130,7 @@ img {
 }
 
 .redo-hero {
+  margin-top: 12px;
   min-height: clamp(240px, 34vw, 360px);
   background-position: center;
   background-repeat: no-repeat;
