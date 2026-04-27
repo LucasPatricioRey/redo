@@ -1,23 +1,19 @@
 :root {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color: #40342d;
-  background:
-    radial-gradient(circle at top left, rgba(247, 216, 207, 0.48), transparent 28%),
-    radial-gradient(circle at right top, rgba(232, 214, 191, 0.42), transparent 30%),
-    linear-gradient(180deg, #fffdfa 0%, #f7f1ea 48%, #f6ede5 100%);
+  font-family: "Montserrat", "Segoe UI", sans-serif;
+  color: #1d1d1d;
+  background: #ffffff;
   color-scheme: light;
-  --panel: rgba(255, 255, 255, 0.82);
-  --panel-strong: rgba(255, 255, 255, 0.92);
-  --panel-border: rgba(122, 97, 84, 0.12);
-  --text-main: #40342d;
-  --text-soft: #65564f;
-  --text-muted: #8d7b72;
-  --accent: #c97a62;
-  --accent-strong: #af614a;
-  --accent-soft: #f6ddd2;
+  --black: #0f0f10;
+  --black-soft: #1a1a1b;
+  --white: #ffffff;
+  --sand: #f4efe8;
+  --sand-strong: #ebe2d8;
+  --text: #1d1d1d;
+  --text-soft: #545454;
+  --border: rgba(15, 15, 16, 0.08);
+  --accent: #d7c1aa;
   --success: #2f8050;
-  --danger: #b45555;
-  --shadow-soft: 0 24px 60px rgba(123, 91, 72, 0.12);
+  --danger: #ba5454;
 }
 
 * {
@@ -32,8 +28,8 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: transparent;
-  color: var(--text-main);
+  background: #ffffff;
+  color: var(--text);
 }
 
 button,
@@ -57,863 +53,456 @@ img {
   display: block;
 }
 
-.page-shell,
-.center-shell {
-  width: min(1220px, calc(100% - 2rem));
+.redo-home {
+  background: #ffffff;
+}
+
+.redo-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255, 255, 255, 0.92);
+  border-bottom: 1px solid rgba(15, 15, 16, 0.06);
+  backdrop-filter: blur(10px);
+}
+
+.redo-header__inner,
+.redo-intro,
+.redo-services,
+.redo-values,
+.redo-booking {
+  width: min(1240px, calc(100% - 2rem));
   margin: 0 auto;
-  padding: 32px 0 88px;
 }
 
-.page-shell--home {
-  position: relative;
-}
-
-.page-shell--salon::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(rgba(201, 122, 98, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(201, 122, 98, 0.05) 1px, transparent 1px);
-  background-size: 52px 52px;
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.45), transparent 88%);
-  pointer-events: none;
-}
-
-.page-shell--salon::after {
-  content: "REDO";
-  position: absolute;
-  top: 8px;
-  right: 0;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(4.5rem, 15vw, 11rem);
-  line-height: 0.86;
-  letter-spacing: -0.08em;
-  color: rgba(201, 122, 98, 0.09);
-  pointer-events: none;
-}
-
-.center-shell {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-}
-
-.dashboard-head,
-.content-grid,
-.booking-section,
-.stats-grid,
-.booking-admin-list,
-.dashboard-grid,
-.simple-list,
-.booking-layout {
-  display: grid;
+.redo-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 24px;
+  min-height: 84px;
 }
 
-.salon-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+.redo-header__brand img {
+  width: 132px;
+  height: auto;
+}
+
+.redo-header__nav {
+  display: flex;
   align-items: center;
-  gap: 30px;
-  min-height: 84vh;
-  position: relative;
-  z-index: 1;
-}
-
-.salon-hero__copy {
-  max-width: 560px;
-}
-
-.salon-hero__brand {
-  display: inline-grid;
-  gap: 8px;
-  margin-bottom: 20px;
-}
-
-.salon-hero__brand span,
-.salon-hero__brand small,
-.salon-story__copy h2,
-.content-card h2,
-.dashboard-card h2,
-.booking-card__head h2,
-.success-card h3,
-.showcase-panel__overlay h2 {
-  font-family: Georgia, "Times New Roman", serif;
-}
-
-.salon-hero__brand span {
-  font-size: clamp(2.6rem, 5vw, 4.2rem);
-  line-height: 0.9;
-  letter-spacing: -0.06em;
-}
-
-.salon-hero__brand small {
-  font-size: 0.95rem;
-  letter-spacing: 0.22em;
+  gap: 24px;
+  font-size: 0.94rem;
   text-transform: uppercase;
-  color: var(--text-muted);
+  letter-spacing: 0.08em;
 }
 
-.salon-hero h1,
-.dashboard-head h1,
-.auth-card h1 {
-  margin: 10px 0 18px;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(3rem, 6.5vw, 5.6rem);
-  line-height: 0.96;
-  letter-spacing: -0.05em;
+.redo-header__nav a {
+  text-decoration: none;
 }
 
-.salon-hero__lead,
-.dashboard-card,
-.auth-card,
-.content-card {
-  color: var(--text-soft);
-}
-
-.salon-hero__lead {
-  font-size: 1.08rem;
-  line-height: 1.8;
-}
-
-.salon-hero__meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 14px;
-  margin-top: 24px;
-}
-
-.salon-hero__meta span,
-.booking-card__chip,
-.status-pill,
-.service-item__hint {
-  display: inline-flex;
-  align-items: center;
-  min-height: 38px;
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.68);
-  border: 1px solid rgba(122, 97, 84, 0.1);
-  color: var(--text-soft);
-}
-
-.salon-hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 28px;
-}
-
-.primary-link,
-.secondary-link,
-.ghost-button,
-.auth-form button,
-.booking-form button,
-.stack-form button,
-.dashboard-card > button,
-.action-button,
-.secondary-button {
+.redo-header__cta,
+.redo-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: 48px;
-  padding: 12px 18px;
+  padding: 12px 22px;
   border-radius: 999px;
   text-decoration: none;
   font-weight: 600;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.primary-link,
-.auth-form button,
-.booking-form button,
-.stack-form button,
-.dashboard-card > button,
-.action-button {
-  color: #fff9f5;
-  background: linear-gradient(135deg, #d7886f 0%, #bb6b55 100%);
-  box-shadow: 0 14px 34px rgba(187, 107, 85, 0.22);
+.redo-header__cta,
+.redo-button--primary {
+  background: var(--black);
+  color: var(--white);
 }
 
-.secondary-link,
-.secondary-button,
-.ghost-button {
-  background: rgba(255, 255, 255, 0.76);
-  color: var(--text-main);
-  border: 1px solid rgba(122, 97, 84, 0.12);
+.redo-button--secondary,
+.redo-button--ghost {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.28);
 }
 
-.primary-link:hover,
-.secondary-link:hover,
-.ghost-button:hover,
-.auth-form button:hover,
-.booking-form button:hover,
-.stack-form button:hover,
-.dashboard-card > button:hover,
-.action-button:hover,
-.secondary-button:hover {
+.redo-button:hover,
+.redo-header__cta:hover {
   transform: translateY(-1px);
 }
 
-.salon-hero__visual {
-  display: grid;
-  gap: 18px;
-}
-
-.salon-hero__carousel,
-.auth-card,
-.dashboard-card,
-.content-card {
+.redo-hero {
   position: relative;
-  background: var(--panel);
-  border: 1px solid var(--panel-border);
-  border-radius: 32px;
-  box-shadow: var(--shadow-soft);
-  overflow: hidden;
-  backdrop-filter: blur(12px);
-}
-
-.auth-card,
-.dashboard-card,
-.content-card {
-  padding: 30px;
-}
-
-.salon-hero__carousel {
-  height: clamp(440px, 58vw, 650px);
-  min-height: 440px;
-}
-
-.salon-hero__carousel-image {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.salon-hero__carousel::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(255, 250, 246, 0.05) 0%, rgba(64, 52, 45, 0.24) 100%);
-}
-
-.salon-hero__carousel-card {
-  position: absolute;
-  left: 24px;
-  right: 24px;
-  bottom: 24px;
-  z-index: 2;
-  padding: 22px;
-  border-radius: 24px;
-  background: rgba(255, 251, 248, 0.82);
-  border: 1px solid rgba(122, 97, 84, 0.08);
-  backdrop-filter: blur(8px);
-}
-
-.salon-hero__carousel-card h2 {
-  margin: 8px 0 10px;
-  font-size: clamp(1.8rem, 2.8vw, 2.6rem);
-  color: var(--text-main);
-}
-
-.salon-hero__carousel-card p:last-child {
-  margin: 0;
-  color: var(--text-soft);
-  line-height: 1.65;
-}
-
-.salon-hero__controls,
-.carousel-dots {
-  display: flex;
-  align-items: center;
-}
-
-.salon-hero__controls {
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.carousel-dots {
-  justify-content: center;
-  gap: 10px;
-  flex: 1;
-}
-
-.carousel-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 999px;
-  background: rgba(122, 97, 84, 0.18);
-  border: 1px solid rgba(122, 97, 84, 0.08);
-}
-
-.carousel-dot--active {
-  background: var(--accent);
-  transform: scale(1.15);
-}
-
-.salon-strip,
-.content-grid--salon,
-.booking-layout--salon,
-.stats-grid,
-.dashboard-grid {
+  min-height: 78vh;
   display: grid;
-  gap: 24px;
+  align-items: center;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.salon-strip {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin-top: 28px;
+.redo-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.5) 42%, rgba(0, 0, 0, 0.18) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
+}
+
+.redo-hero__content {
   position: relative;
   z-index: 1;
+  width: min(1240px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 82px 0;
+  color: var(--white);
 }
 
-.salon-strip__item {
-  padding: 24px;
-  border-radius: 28px;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(122, 97, 84, 0.1);
-  box-shadow: var(--shadow-soft);
-}
-
-.salon-strip__item span,
-.eyebrow {
-  display: inline-block;
-  color: var(--accent-strong);
+.redo-kicker {
+  margin: 0 0 14px;
+  font-size: 0.82rem;
+  font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  font-size: 0.76rem;
 }
 
-.salon-strip__item strong {
-  display: block;
-  margin: 10px 0 10px;
-  color: var(--text-main);
-  font-size: 1.1rem;
-}
-
-.salon-strip__item p,
-.section-helper,
-.service-item p,
-.team-item p,
-.team-item small,
-.booking-admin-item p,
-.simple-item p,
-.form-helper,
-.form-error,
-.form-success {
+.redo-hero h1,
+.redo-section-head h2,
+.redo-intro__copy h2,
+.redo-success h3 {
   margin: 0;
-  line-height: 1.7;
+  font-family: Georgia, "Times New Roman", serif;
+  letter-spacing: -0.04em;
+}
+
+.redo-hero h1 {
+  max-width: 650px;
+  font-size: clamp(3.5rem, 8vw, 6.4rem);
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+.redo-hero p:not(.redo-kicker) {
+  max-width: 520px;
+  margin: 22px 0 0;
+  font-size: 1.08rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.redo-hero__actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+.redo-intro,
+.redo-services,
+.redo-values,
+.redo-booking {
+  padding: 88px 0 0;
+}
+
+.redo-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.06fr);
+  gap: 42px;
+  align-items: center;
+}
+
+.redo-intro__copy h2,
+.redo-section-head h2 {
+  font-size: clamp(2.3rem, 4vw, 3.7rem);
+  line-height: 1.02;
+}
+
+.redo-intro__copy p:not(.redo-kicker),
+.redo-value-card p,
+.redo-service-card__body p,
+.redo-helper,
+.redo-error,
+.redo-success__message,
+.redo-contact-card p,
+.redo-contact-card li {
+  line-height: 1.75;
   color: var(--text-soft);
 }
 
-.salon-story {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: 24px;
-  margin-top: 34px;
-  position: relative;
-  z-index: 1;
-}
-
-.content-card--light {
-  background: rgba(255, 255, 255, 0.8);
-}
-
-.content-card--accent-soft {
-  background:
-    linear-gradient(135deg, rgba(246, 221, 210, 0.55), rgba(255, 255, 255, 0.84) 52%),
-    rgba(255, 255, 255, 0.8);
-}
-
-.salon-story__copy {
-  display: grid;
-  align-content: center;
-}
-
-.salon-story__copy h2,
-.content-card h2,
-.dashboard-card h2 {
-  margin: 8px 0 18px;
-  font-size: clamp(1.9rem, 2.6vw, 3rem);
-  color: var(--text-main);
-}
-
-.salon-story__copy p:last-child {
-  margin: 0;
-  line-height: 1.8;
-}
-
-.salon-story__gallery {
-  display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: 18px;
-}
-
-.salon-story__gallery img,
-.mosaic-grid__item img,
-.ambiance-card__stack img {
+.redo-intro__media img {
   width: 100%;
-  height: 100%;
+  min-height: 620px;
   object-fit: cover;
   border-radius: 28px;
 }
 
-.salon-story__gallery img:first-child {
-  min-height: 420px;
+.redo-button--secondary {
+  background: var(--black);
+  color: var(--white);
+  border: 0;
 }
 
-.salon-story__gallery img:last-child {
-  min-height: 420px;
+.redo-section-head {
+  max-width: 760px;
+  margin-bottom: 34px;
 }
 
-.content-grid--salon,
-.booking-layout--salon {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin-top: 34px;
-  position: relative;
-  z-index: 1;
-}
-
-.service-list,
-.team-list,
-.booking-form,
-.stack-form,
-.simple-list,
-.booking-admin-list {
-  display: grid;
-  gap: 16px;
-}
-
-.service-list--cards {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.service-item,
-.team-item,
-.booking-admin-item,
-.simple-item,
-.schedule-editor {
-  border-radius: 24px;
-  border: 1px solid rgba(122, 97, 84, 0.1);
-  background: rgba(255, 255, 255, 0.74);
-}
-
-.service-item,
-.team-item,
-.booking-admin-item,
-.simple-item {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 18px;
-}
-
-.service-item--card {
-  display: grid;
-}
-
-.service-item__topline {
-  display: flex;
-  align-items: start;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.service-item h3,
-.team-item h3,
-.booking-admin-item h3,
-.simple-item strong,
-.quote-panel strong {
+.redo-state {
   margin: 0;
-  color: var(--text-main);
+  color: var(--text-soft);
 }
 
-.service-item__topline strong {
-  color: var(--accent-strong);
-  white-space: nowrap;
-}
-
-.service-item__hint {
-  width: fit-content;
-  margin-top: 12px;
-  font-size: 0.9rem;
-}
-
-.team-list--stack {
-  gap: 14px;
-}
-
-.team-item--salon {
-  align-items: center;
-}
-
-.team-item__badge {
-  width: 58px;
-  height: 58px;
-  flex: 0 0 58px;
-  border-radius: 20px;
+.redo-services__grid {
   display: grid;
-  place-items: center;
-  background: linear-gradient(135deg, #f7ddd2 0%, #f2e7dc 100%);
-  color: var(--accent-strong);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.4rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
 }
 
-.team-item small {
-  display: inline-block;
-  margin-top: 6px;
-  color: var(--text-muted);
+.redo-service-card {
+  background: var(--sand);
+  border-radius: 24px;
+  overflow: hidden;
 }
 
-.mosaic-grid {
+.redo-service-card img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+}
+
+.redo-service-card__body {
+  padding: 22px;
+}
+
+.redo-service-card__body h3,
+.redo-value-card h3 {
+  margin: 0 0 12px;
+  font-size: 1.2rem;
+  color: var(--text);
+  text-transform: uppercase;
+}
+
+.redo-service-card__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(15, 15, 16, 0.08);
+  font-size: 0.95rem;
+}
+
+.redo-service-card__meta strong {
+  color: var(--text);
+}
+
+.redo-values__grid {
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr 0.9fr 1.1fr;
-  gap: 18px;
-  margin-top: 30px;
-  position: relative;
-  z-index: 1;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
 }
 
-.mosaic-grid__item {
-  min-height: 240px;
+.redo-value-card {
+  min-height: 250px;
+  padding: 30px;
+  background: var(--black);
+  color: var(--white);
+  border-radius: 24px;
+}
+
+.redo-value-card p {
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.redo-booking {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+  gap: 28px;
+  padding-bottom: 88px;
+}
+
+.redo-booking__panel,
+.redo-contact-card {
   border-radius: 28px;
   overflow: hidden;
-  box-shadow: var(--shadow-soft);
 }
 
-.mosaic-grid__item:nth-child(2),
-.mosaic-grid__item:nth-child(3) {
-  transform: translateY(32px);
+.redo-booking__panel {
+  padding: 34px;
+  background: var(--sand);
 }
 
-.booking-card--salon {
-  background:
-    linear-gradient(135deg, rgba(246, 221, 210, 0.7), rgba(255, 255, 255, 0.9) 42%),
-    rgba(255, 255, 255, 0.85);
+.redo-section-head--compact {
+  margin-bottom: 24px;
 }
 
-.booking-card__head,
-.booking-card__footer,
-.dashboard-head,
-.booking-admin-item__head,
-.actions-row {
+.redo-form,
+.redo-form__messages {
+  display: grid;
+  gap: 16px;
+}
+
+.redo-form__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.redo-form label {
+  display: grid;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: var(--text-soft);
+}
+
+.redo-form input,
+.redo-form select,
+.redo-form textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(15, 15, 16, 0.08);
+  background: var(--white);
+  color: var(--text);
+}
+
+.redo-form input:focus,
+.redo-form select:focus,
+.redo-form textarea:focus {
+  outline: 1px solid rgba(15, 15, 16, 0.22);
+}
+
+.redo-form__footer {
   display: flex;
   justify-content: space-between;
-  gap: 16px;
+  gap: 18px;
+  align-items: flex-end;
   flex-wrap: wrap;
 }
 
-.booking-card__head--salon {
-  align-items: start;
-  margin-bottom: 18px;
-}
-
-.booking-card__chip--light {
-  background: rgba(255, 249, 245, 0.85);
-}
-
-.booking-card__messages {
-  display: grid;
-  gap: 8px;
-}
-
-.form-grid,
-.filters-row {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.form-grid--two {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.booking-form label,
-.auth-form label,
-.filters-row label,
-.schedule-editor {
-  display: grid;
-  gap: 8px;
-  color: var(--text-soft);
-}
-
-.booking-form input,
-.booking-form select,
-.booking-form textarea,
-.auth-form input,
-.filters-row input,
-.filters-row select,
-.stack-form input,
-.stack-form select,
-.stack-form textarea,
-.schedule-editor input {
-  width: 100%;
-  padding: 15px 16px;
-  border-radius: 18px;
-  border: 1px solid rgba(122, 97, 84, 0.14);
-  background: rgba(255, 255, 255, 0.9);
-  color: var(--text-main);
-}
-
-.booking-form input:focus,
-.booking-form select:focus,
-.booking-form textarea:focus,
-.auth-form input:focus,
-.filters-row input:focus,
-.filters-row select:focus,
-.stack-form input:focus,
-.stack-form select:focus,
-.stack-form textarea:focus,
-.schedule-editor input:focus {
-  outline: 1px solid rgba(175, 97, 74, 0.35);
-  border-color: rgba(175, 97, 74, 0.45);
-}
-
-.success-card {
-  margin-top: 26px;
-  padding: 24px;
-  border-radius: 26px;
-  display: grid;
-  gap: 12px;
-}
-
-.success-card--light {
-  background: rgba(239, 251, 242, 0.92);
-  border: 1px solid rgba(84, 155, 102, 0.18);
-}
-
-.success-card h3 {
-  font-size: 1.5rem;
-}
-
-.success-card__grid {
-  display: grid;
-  gap: 8px;
-  color: var(--text-soft);
-}
-
-.form-error {
+.redo-error {
   color: var(--danger);
 }
 
-.form-success {
-  color: var(--success);
+.redo-success {
+  margin-top: 28px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.76);
+  border-radius: 22px;
 }
 
-.content-card--quote {
+.redo-success h3 {
+  margin-top: 6px;
+  font-size: 1.9rem;
+}
+
+.redo-success__grid {
   display: grid;
-  gap: 18px;
+  gap: 8px;
+  margin: 16px 0 22px;
 }
 
-.quote-panel {
+.redo-contact-card {
+  padding: 36px 30px;
+  background: var(--black-soft);
+  color: var(--white);
+}
+
+.redo-contact-card__logo {
+  width: 150px;
+  margin-bottom: 20px;
+}
+
+.redo-contact-card a {
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.redo-contact-card__services {
+  margin-top: 30px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.redo-contact-card__services strong {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.redo-contact-card__services ul {
+  margin: 0;
+  padding-left: 18px;
   display: grid;
-  gap: 10px;
-  padding: 22px;
-  border-radius: 24px;
-  background: linear-gradient(135deg, rgba(247, 221, 210, 0.62), rgba(255, 255, 255, 0.78));
-  border: 1px solid rgba(122, 97, 84, 0.08);
-}
-
-.quote-panel span {
-  color: var(--text-soft);
-}
-
-.ambiance-card__stack {
-  display: grid;
-  gap: 16px;
-}
-
-.ambiance-card__stack--salon {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.ambiance-card__stack img {
-  min-height: 250px;
-}
-
-.auth-card::before,
-.dashboard-card::before,
-.content-card::before,
-.salon-strip__item::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), transparent 42%);
-  pointer-events: none;
-}
-
-.auth-card {
-  width: min(100%, 440px);
-}
-
-.auth-form,
-.stack-form {
-  display: grid;
-  gap: 16px;
-}
-
-.stats-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.stat-card {
-  display: grid;
-  gap: 10px;
-}
-
-.stat-card strong {
-  font-size: 2.6rem;
-  color: var(--text-main);
-}
-
-.dashboard-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  align-items: start;
-  margin-top: 24px;
-}
-
-.booking-admin-item__meta {
-  display: grid;
-  gap: 6px;
-  color: var(--text-muted);
-}
-
-.booking-admin-item__notes {
-  color: var(--text-soft);
-}
-
-.status-pill {
-  width: fit-content;
-  text-transform: capitalize;
-}
-
-.status-pill[data-status="confirmado"] {
-  background: rgba(233, 248, 237, 0.92);
-  color: #34784c;
-}
-
-.status-pill[data-status="cancelado"] {
-  background: rgba(252, 235, 235, 0.92);
-  color: #a24a4a;
-}
-
-.action-button--confirm {
-  background: linear-gradient(135deg, #7fbe92 0%, #5aa06f 100%);
-}
-
-.action-button--cancel {
-  background: linear-gradient(135deg, #e19b9b 0%, #c97070 100%);
-}
-
-.action-button--danger {
-  background: linear-gradient(135deg, #d98484 0%, #bb5d5d 100%);
-}
-
-.action-button:disabled,
-.secondary-button:disabled {
-  opacity: 0.65;
-  cursor: wait;
-}
-
-.simple-item,
-.schedule-editor {
-  display: grid;
-}
-
-.checkbox-line {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.checkbox-line input {
-  width: auto;
-}
-
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-  transition: opacity 0.45s ease, transform 0.45s ease;
-}
-
-.fade-slide-enter-from,
-.fade-slide-leave-to {
-  opacity: 0;
-  transform: scale(1.02);
+  gap: 8px;
 }
 
 @media (max-width: 1040px) {
-  .salon-hero,
-  .salon-strip,
-  .salon-story,
-  .content-grid--salon,
-  .mosaic-grid,
-  .booking-layout--salon,
-  .stats-grid,
-  .dashboard-grid,
-  .form-grid,
-  .filters-row,
-  .service-list--cards {
+  .redo-intro,
+  .redo-services__grid,
+  .redo-values__grid,
+  .redo-booking,
+  .redo-form__grid {
     grid-template-columns: 1fr;
   }
 
-  .salon-hero__carousel {
-    height: 440px;
-    min-height: 440px;
+  .redo-intro__media img {
+    min-height: 460px;
+  }
+}
+
+@media (max-width: 840px) {
+  .redo-header__inner,
+  .redo-header__nav {
+    flex-wrap: wrap;
   }
 
-  .salon-story__gallery {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .mosaic-grid__item:nth-child(2),
-  .mosaic-grid__item:nth-child(3) {
-    transform: none;
+  .redo-header__inner {
+    justify-content: center;
+    padding: 14px 0;
   }
 }
 
 @media (max-width: 720px) {
-  .page-shell,
-  .center-shell {
+  .redo-header__inner,
+  .redo-intro,
+  .redo-services,
+  .redo-values,
+  .redo-booking,
+  .redo-hero__content {
     width: min(100%, calc(100% - 1rem));
   }
 
-  .salon-hero h1,
-  .dashboard-head h1,
-  .auth-card h1 {
-    font-size: 2.8rem;
+  .redo-header__nav {
+    justify-content: center;
+    gap: 16px;
+    font-size: 0.8rem;
   }
 
-  .salon-hero__carousel-card {
-    left: 16px;
-    right: 16px;
-    bottom: 16px;
-    padding: 18px;
+  .redo-hero {
+    min-height: 72vh;
   }
 
-  .salon-story__gallery,
-  .ambiance-card__stack--salon {
-    grid-template-columns: 1fr;
+  .redo-hero h1 {
+    font-size: 3rem;
   }
 
-  .booking-card__footer,
-  .booking-admin-item__head,
-  .actions-row,
-  .salon-hero__controls,
-  .salon-hero__actions,
-  .salon-hero__meta,
-  .service-item,
-  .team-item {
+  .redo-hero__actions,
+  .redo-form__footer {
     display: grid;
   }
 
-  .salon-hero__actions .primary-link,
-  .salon-hero__actions .secondary-link,
-  .salon-hero__controls .ghost-button {
+  .redo-button,
+  .redo-header__cta {
     width: 100%;
+  }
+
+  .redo-booking__panel,
+  .redo-contact-card {
+    padding: 24px;
   }
 }

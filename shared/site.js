@@ -1,7 +1,7 @@
 export const studioInfo = {
   name: "REDO",
   city: "Buenos Aires",
-  address: "Bolaños 229, Floresta",
+  address: "Bolanos 229, Floresta",
   phone: "+54 9 11 5409 7209",
   schedule: {
     monday: { enabled: true, open: "10:00", close: "20:00" },
@@ -17,7 +17,7 @@ export const studioInfo = {
 export const services = [
   {
     slug: "corte-signature",
-    name: "Corte de diseño",
+    name: "Corte de diseno",
     description: "Corte personalizado con asesoramiento de estilo y terminacion precisa.",
     duration: 60,
     price: 18000,

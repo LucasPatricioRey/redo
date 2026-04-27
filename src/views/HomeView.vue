@@ -1,153 +1,124 @@
 <template>
-  <main class="page-shell page-shell--home page-shell--salon">
-    <section class="salon-hero">
-      <div class="salon-hero__copy">
-        <p class="eyebrow">Salon unisex en Floresta</p>
-        <div class="salon-hero__brand">
-          <span>REDO</span>
-          <small>Corte, color y bienestar capilar</small>
-        </div>
-        <h1>Una peluqueria luminosa, actual y pensada para verse bien desde el primer turno.</h1>
-        <p class="salon-hero__lead">
-          REDO combina corte, color, brushing y tratamientos en una propuesta simple de entender,
-          cercana y profesional. La experiencia arranca online, pero se siente como un salon real.
-        </p>
-        <div class="salon-hero__meta">
-          <span>{{ studioInfo.address }}</span>
-          <span>{{ studioInfo.phone }}</span>
-          <span>Lunes a sabado con agenda activa</span>
-        </div>
-        <div class="salon-hero__actions">
-          <a class="primary-link" href="#reserva">Reservar turno</a>
-          <a class="secondary-link" href="#servicios">Ver servicios</a>
-        </div>
+  <main class="redo-home">
+    <header class="redo-header">
+      <div class="redo-header__inner">
+        <a class="redo-header__brand" href="#inicio">
+          <img :src="redoLogo" alt="Logo de REDO" />
+        </a>
+
+        <nav class="redo-header__nav">
+          <a href="#servicios">Servicios</a>
+          <a href="#nosotros">Nosotros</a>
+          <a href="#enfoque">Enfoque</a>
+          <a href="#reserva">Contacto</a>
+        </nav>
+
+        <a class="redo-header__cta" :href="whatsappBaseLink" target="_blank" rel="noreferrer">
+          Reservar turno
+        </a>
       </div>
+    </header>
 
-      <div class="salon-hero__visual">
-        <div class="salon-hero__carousel">
-          <transition name="fade-slide" mode="out-in">
-            <img
-              :key="activeSlide.image"
-              :src="activeSlide.image"
-              :alt="activeSlide.title"
-              class="salon-hero__carousel-image"
-            />
-          </transition>
-          <div class="salon-hero__carousel-card">
-            <p class="eyebrow">{{ activeSlide.eyebrow }}</p>
-            <h2>{{ activeSlide.title }}</h2>
-            <p>{{ activeSlide.description }}</p>
-          </div>
-        </div>
-
-        <div class="salon-hero__controls">
-          <button class="ghost-button" type="button" @click="previousSlide">Anterior</button>
-          <div class="carousel-dots">
-            <button
-              v-for="(slide, index) in slides"
-              :key="slide.image"
-              class="carousel-dot"
-              :class="{ 'carousel-dot--active': index === activeSlideIndex }"
-              type="button"
-              @click="setSlide(index)"
-            ></button>
-          </div>
-          <button class="ghost-button" type="button" @click="nextSlide">Siguiente</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="salon-strip">
-      <article v-for="item in heroHighlights" :key="item.title" class="salon-strip__item">
-        <span>{{ item.label }}</span>
-        <strong>{{ item.title }}</strong>
-        <p>{{ item.description }}</p>
-      </article>
-    </section>
-
-    <section id="servicios" class="salon-story">
-      <article class="salon-story__copy content-card content-card--light">
-        <p class="eyebrow">La propuesta</p>
-        <h2>Un espacio unisex con foco en imagen, comodidad y resultados prolijos.</h2>
+    <section id="inicio" class="redo-hero" :style="{ backgroundImage: `url(${redoBanner})` }">
+      <div class="redo-hero__overlay"></div>
+      <div class="redo-hero__content">
+        <p class="redo-kicker">Salon unisex en Floresta</p>
+        <h1>Peluqueria & estetica integral</h1>
         <p>
-          La idea de REDO es sentirse más cerca de una peluqueria de barrio bien resuelta que de
-          una barberia conceptual. Corte, color y cuidado capilar conviven en una carta clara y
-          adaptable para distintos estilos.
+          Corte, color, brushing y tratamientos en un espacio pensado para una experiencia prolija,
+          cercana y actual.
         </p>
-      </article>
-
-      <div class="salon-story__gallery">
-        <img
-          src="https://images.pexels.com/photos/7755540/pexels-photo-7755540.jpeg?auto=compress&cs=tinysrgb&w=1600"
-          alt="Salon de peluqueria luminoso"
-        />
-        <img
-          src="https://images.pexels.com/photos/3992876/pexels-photo-3992876.jpeg?auto=compress&cs=tinysrgb&w=1200"
-          alt="Herramientas de peluqueria"
-        />
+        <div class="redo-hero__actions">
+          <a class="redo-button redo-button--primary" href="#reserva">Solicitar turno</a>
+          <a class="redo-button redo-button--ghost" href="#servicios">Ver servicios</a>
+        </div>
       </div>
     </section>
 
-    <section class="content-grid content-grid--salon">
-      <article class="content-card content-card--light">
-        <p class="eyebrow">Servicios</p>
-        <h2>Corte, color y tratamientos para una propuesta realmente unisex.</h2>
-        <p class="section-helper">
-          Cada servicio busca reflejar una peluqueria actual: más abierta, más clara y con espacio
-          para corte clásico, color y cambios de look.
+    <section id="nosotros" class="redo-intro">
+      <div class="redo-intro__copy">
+        <p class="redo-kicker">Nosotros</p>
+        <h2>8 anos de trayectoria en Floresta, con foco en belleza, color y salud capilar.</h2>
+        <p>
+          Somos REDO, un salon unisex nacido en el barrio con una propuesta que mezcla tecnica,
+          diagnostico y una atencion simple de entender. Nos especializamos en corte, balayage,
+          coloracion, brushing y tratamientos pensados para realzar cada estilo sin perder naturalidad.
         </p>
-        <p v-if="catalogLoading">Cargando servicios...</p>
-        <div v-else class="service-list service-list--cards">
-          <div v-for="service in services" :key="service.slug" class="service-item service-item--card">
-            <div class="service-item__topline">
-              <h3>{{ service.name }}</h3>
+        <p>
+          Nuestro equipo trabaja con una mirada actual y cercana, priorizando el estado del cabello
+          antes de cada servicio y acompanando a cada cliente con recomendaciones reales para el
+          cuidado diario.
+        </p>
+        <a class="redo-button redo-button--secondary" href="#reserva">Reservar online</a>
+      </div>
+
+      <div class="redo-intro__media">
+        <img :src="redoAbout" alt="Profesional trabajando un balayage en REDO" />
+      </div>
+    </section>
+
+    <section id="servicios" class="redo-services">
+      <div class="redo-section-head">
+        <p class="redo-kicker">Servicios</p>
+        <h2>Una carta pensada para una peluqueria unisex moderna y funcional.</h2>
+      </div>
+
+      <p v-if="catalogLoading" class="redo-state">Cargando servicios...</p>
+      <div v-else class="redo-services__grid">
+        <article v-for="service in serviceCards" :key="service.slug" class="redo-service-card">
+          <img :src="service.image" :alt="service.name" />
+          <div class="redo-service-card__body">
+            <h3>{{ service.name }}</h3>
+            <p>{{ service.description }}</p>
+            <div class="redo-service-card__meta">
+              <span>{{ service.duration }} min</span>
               <strong>${{ Number(service.price).toLocaleString("es-AR") }}</strong>
             </div>
-            <p>{{ service.description }}</p>
-            <span class="service-item__hint">{{ service.duration }} min aproximados</span>
           </div>
-        </div>
-      </article>
-
-      <article class="content-card content-card--light content-card--accent-soft">
-        <p class="eyebrow">Equipo</p>
-        <h2>Perfiles definidos para corte, color y atencion personalizada.</h2>
-        <p class="section-helper">
-          Un equipo chico y entendible ayuda a que la reserva online se sienta confiable y no una
-          caja negra.
-        </p>
-        <p v-if="catalogLoading">Cargando profesionales...</p>
-        <div v-else class="team-list team-list--stack">
-          <div v-for="barber in barbers" :key="barber.slug" class="team-item team-item--salon">
-            <div class="team-item__badge">{{ barber.name.charAt(0) }}</div>
-            <div>
-              <h3>{{ barber.name }}</h3>
-              <p>{{ barber.role }}</p>
-              <small>{{ (barber.specialties || []).join(" - ") }}</small>
-            </div>
-          </div>
-        </div>
-      </article>
-    </section>
-
-    <section class="mosaic-grid">
-      <div v-for="image in galleryImages" :key="image.src" class="mosaic-grid__item">
-        <img :src="image.src" :alt="image.alt" />
+        </article>
       </div>
     </section>
 
-    <section id="reserva" class="booking-layout booking-layout--salon">
-      <article class="content-card content-card--light booking-card booking-card--salon">
-        <div class="booking-card__head booking-card__head--salon">
-          <div>
-            <p class="eyebrow">Reserva online</p>
-            <h2>Solicitar turno</h2>
-          </div>
-          <span class="booking-card__chip booking-card__chip--light">Disponibilidad real</span>
+    <section id="enfoque" class="redo-values">
+      <div class="redo-section-head">
+        <p class="redo-kicker">Nuestro enfoque</p>
+        <h2>Detalles que hacen que REDO se sienta como un salon real y bien cuidado.</h2>
+      </div>
+
+      <div class="redo-values__grid">
+        <article class="redo-value-card">
+          <h3>Diagnostico personalizado</h3>
+          <p>
+            Antes de cada servicio evaluamos textura, base, color previo y objetivo final para
+            elegir la mejor tecnica.
+          </p>
+        </article>
+        <article class="redo-value-card">
+          <h3>Color y cuidado</h3>
+          <p>
+            Buscamos resultados prolijos, luminosos y sostenibles en el tiempo, con foco en la
+            salud capilar y en el mantenimiento en casa.
+          </p>
+        </article>
+        <article class="redo-value-card">
+          <h3>Reserva simple</h3>
+          <p>
+            La agenda online muestra disponibilidad real y permite continuar la confirmacion por
+            WhatsApp de forma directa.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="reserva" class="redo-booking">
+      <article class="redo-booking__panel">
+        <div class="redo-section-head redo-section-head--compact">
+          <p class="redo-kicker">Contacto y reservas</p>
+          <h2>Solicitar turno</h2>
         </div>
 
-        <form class="booking-form booking-form--light" @submit.prevent="submitBooking">
-          <div class="form-grid">
+        <form class="redo-form" @submit.prevent="submitBooking">
+          <div class="redo-form__grid">
             <label>
               Nombre y apellido
               <input v-model="form.customerName" type="text" required />
@@ -196,57 +167,48 @@
             <textarea
               v-model="form.notes"
               rows="4"
-              placeholder="Ejemplo: me gustaria un cambio de look, cubrir canas o un brushing con movimiento"
+              placeholder="Contanos si queres color, brushing, un cambio de look o algun detalle importante"
             ></textarea>
           </label>
 
-          <div class="booking-card__footer">
-            <div class="booking-card__messages">
-              <p v-if="slotsMessage" class="form-helper">{{ slotsMessage }}</p>
-              <p v-if="errorMessage" class="form-error">{{ errorMessage }}</p>
+          <div class="redo-form__footer">
+            <div class="redo-form__messages">
+              <p v-if="slotsMessage" class="redo-helper">{{ slotsMessage }}</p>
+              <p v-if="errorMessage" class="redo-error">{{ errorMessage }}</p>
             </div>
-            <button :disabled="submitting || catalogLoading" type="submit">
+            <button :disabled="submitting || catalogLoading" class="redo-button redo-button--primary" type="submit">
               {{ submitting ? "Enviando reserva..." : "Confirmar solicitud" }}
             </button>
           </div>
         </form>
 
-        <div v-if="reservationSummary" class="success-card success-card--light">
-          <p class="eyebrow">Reserva enviada</p>
+        <div v-if="reservationSummary" class="redo-success">
+          <p class="redo-kicker">Reserva enviada</p>
           <h3>Solicitud recibida correctamente</h3>
-          <p class="form-success">{{ successMessage }}</p>
-          <div class="success-card__grid">
+          <p class="redo-success__message">{{ successMessage }}</p>
+          <div class="redo-success__grid">
             <span>Servicio: <strong>{{ reservationSummary.serviceName }}</strong></span>
             <span>Profesional: <strong>{{ reservationSummary.barberName }}</strong></span>
             <span>Fecha: <strong>{{ reservationSummary.date }}</strong></span>
             <span>Horario: <strong>{{ reservationSummary.time }}</strong></span>
           </div>
-          <a class="primary-link" :href="whatsappLink" target="_blank" rel="noreferrer">
+          <a class="redo-button redo-button--secondary" :href="whatsappLink" target="_blank" rel="noreferrer">
             Confirmar por WhatsApp
           </a>
         </div>
       </article>
 
-      <aside class="content-card content-card--light content-card--quote">
-        <p class="eyebrow">Experiencia REDO</p>
-        <h2>Una fachada más cercana a un salon real y menos a una landing genérica.</h2>
-        <p class="section-helper">
-          Mientras después sumemos fotos propias, esta selección visual ya empuja a REDO hacia un
-          tono más claro, más beauty y más unisex.
-        </p>
-        <div class="quote-panel">
-          <strong>“Color, corte y bienestar capilar en un mismo lugar.”</strong>
-          <span>Atencion con reserva online y confirmacion por WhatsApp.</span>
-        </div>
-        <div class="ambiance-card__stack ambiance-card__stack--salon">
-          <img
-            src="https://images.pexels.com/photos/853427/pexels-photo-853427.jpeg?auto=compress&cs=tinysrgb&w=1200"
-            alt="Salon con espejos"
-          />
-          <img
-            src="https://images.pexels.com/photos/973401/pexels-photo-973401.jpeg?auto=compress&cs=tinysrgb&w=1200"
-            alt="Trabajo de coloracion"
-          />
+      <aside class="redo-contact-card">
+        <img :src="redoLogo" alt="Logo de REDO" class="redo-contact-card__logo" />
+        <p>{{ studioInfo.address }}</p>
+        <p>Buenos Aires, Argentina</p>
+        <a :href="whatsappBaseLink" target="_blank" rel="noreferrer">{{ studioInfo.phone }}</a>
+
+        <div class="redo-contact-card__services">
+          <strong>Servicios destacados</strong>
+          <ul>
+            <li v-for="service in footerServices" :key="service.slug">{{ service.name }}</li>
+          </ul>
         </div>
       </aside>
     </section>
@@ -254,80 +216,35 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, reactive, ref, watch } from "vue";
+import { computed, onMounted, reactive, ref, watch } from "vue";
 import { api } from "../utils/api.js";
 import { studioInfo } from "../../shared/site.js";
+import redoAbout from "../assets/redo-about.png";
+import redoBanner from "../assets/redo-banner.png";
+import redoLogo from "../assets/redo-logo.png";
 
-const slides = [
-  {
-    eyebrow: "Imagen de salon",
-    title: "Luz natural y una primera impresion mas calida",
-    description: "REDO se mueve hacia una estetica mas clara, premium y unisex, inspirada en salones reales.",
-    image: "https://images.pexels.com/photos/7755540/pexels-photo-7755540.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  },
-  {
-    eyebrow: "Pelo y movimiento",
-    title: "Color, brushing y cambios de look con protagonismo real",
-    description: "La home ahora vende mejor la idea de peluqueria unisex y no solo de barberia.",
-    image: "https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  },
-  {
-    eyebrow: "Ambiente",
-    title: "Un salon prolijo, suave y mas cercano a una marca propia",
-    description: "La combinacion de tipografia, aire y fotografia apunta a una identidad mas memorable.",
-    image: "https://images.pexels.com/photos/853427/pexels-photo-853427.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  },
-  {
-    eyebrow: "Detalle",
-    title: "Cuidado capilar, herramientas y una experiencia mas completa",
-    description: "La marca se abre a corte, color y tratamiento, con una fachada mas realista.",
-    image: "https://images.pexels.com/photos/3992876/pexels-photo-3992876.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  },
-];
-
-const heroHighlights = [
-  {
-    label: "Corte y color",
-    title: "Servicios para distintos estilos y edades",
-    description: "La propuesta se siente unisex desde el inicio y no solo en la lista de servicios.",
-  },
-  {
-    label: "Reserva real",
-    title: "Agenda activa segun profesional, fecha y horario",
-    description: "El formulario sigue conectado a disponibilidad real y confirmacion por WhatsApp.",
-  },
-  {
-    label: "Salon actual",
-    title: "Una imagen mas clara, editorial y confiable",
-    description: "Más aire, más luz y más identidad visual para que REDO se vea mas profesional.",
-  },
-];
-
-const galleryImages = [
-  {
-    src: "https://images.pexels.com/photos/3993304/pexels-photo-3993304.jpeg?auto=compress&cs=tinysrgb&w=1200",
-    alt: "Aplicacion de tintura en peluqueria",
-  },
-  {
-    src: "https://images.pexels.com/photos/1813272/pexels-photo-1813272.jpeg?auto=compress&cs=tinysrgb&w=1200",
-    alt: "Mujer peinandose en salon",
-  },
-  {
-    src: "https://images.pexels.com/photos/4620843/pexels-photo-4620843.jpeg?auto=compress&cs=tinysrgb&w=1200",
-    alt: "Lavado de cabello en peluqueria",
-  },
-  {
-    src: "https://images.pexels.com/photos/3065209/pexels-photo-3065209.jpeg?auto=compress&cs=tinysrgb&w=1200",
-    alt: "Corte de cabello en interior luminoso",
-  },
-];
-
-const activeSlideIndex = ref(0);
-let carouselInterval = null;
+const serviceImageMap = {
+  "corte-signature": "https://images.pexels.com/photos/3065209/pexels-photo-3065209.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  "barba-premium": "https://images.pexels.com/photos/7697390/pexels-photo-7697390.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  "combo-completo": "https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  "brushing-pro": "https://images.pexels.com/photos/1813272/pexels-photo-1813272.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  "tintura-global": "https://images.pexels.com/photos/3993304/pexels-photo-3993304.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  "balayage-soft": redoAbout,
+  "nutricion-capilar": "https://images.pexels.com/photos/4620843/pexels-photo-4620843.jpeg?auto=compress&cs=tinysrgb&w=1200",
+};
 
 const services = ref([]);
 const barbers = ref([]);
 const catalogLoading = ref(true);
+const availableSlots = ref([]);
+const loadingSlots = ref(false);
+const submitting = ref(false);
+const errorMessage = ref("");
+const successMessage = ref("");
+const reservationSummary = ref(null);
+const resettingAfterSubmit = ref(false);
+const slotsMessage = ref("Selecciona servicio, profesional y fecha para ver horarios reales.");
+
 const form = reactive({
   customerName: "",
   customerPhone: "",
@@ -338,58 +255,33 @@ const form = reactive({
   notes: "",
 });
 
-const availableSlots = ref([]);
-const loadingSlots = ref(false);
-const submitting = ref(false);
-const errorMessage = ref("");
-const successMessage = ref("");
-const reservationSummary = ref(null);
-const resettingAfterSubmit = ref(false);
-const slotsMessage = ref("Selecciona servicio, profesional y fecha para ver horarios reales.");
-
-const activeSlide = computed(() => slides[activeSlideIndex.value]);
-
 const minimumDate = computed(() => {
   const today = new Date();
   return today.toISOString().split("T")[0];
 });
 
+const whatsappBaseLink = computed(() => `https://wa.me/${studioInfo.phone.replace(/\D/g, "")}`);
+
 const whatsappLink = computed(() => {
   if (!reservationSummary.value) {
-    return "#";
+    return whatsappBaseLink.value;
   }
 
-  const phone = studioInfo.phone.replace(/\D/g, "");
   const message = encodeURIComponent(
     `Hola REDO, envie una reserva para ${reservationSummary.value.serviceName} con ${reservationSummary.value.barberName} el ${reservationSummary.value.date} a las ${reservationSummary.value.time}.`
   );
 
-  return `https://wa.me/${phone}?text=${message}`;
+  return `${whatsappBaseLink.value}?text=${message}`;
 });
 
-function setSlide(index) {
-  activeSlideIndex.value = index;
-}
+const serviceCards = computed(() =>
+  services.value.map((service) => ({
+    ...service,
+    image: serviceImageMap[service.slug] || redoAbout,
+  }))
+);
 
-function nextSlide() {
-  activeSlideIndex.value = (activeSlideIndex.value + 1) % slides.length;
-}
-
-function previousSlide() {
-  activeSlideIndex.value = (activeSlideIndex.value - 1 + slides.length) % slides.length;
-}
-
-function startCarousel() {
-  carouselInterval = window.setInterval(() => {
-    nextSlide();
-  }, 4800);
-}
-
-function stopCarousel() {
-  if (carouselInterval) {
-    window.clearInterval(carouselInterval);
-  }
-}
+const footerServices = computed(() => services.value.slice(0, 6));
 
 async function fetchCatalog() {
   catalogLoading.value = true;
@@ -462,6 +354,7 @@ async function submitBooking() {
       date: payload.date,
       time: payload.time,
     };
+
     resettingAfterSubmit.value = true;
     Object.assign(form, {
       customerName: "",
@@ -475,6 +368,7 @@ async function submitBooking() {
     availableSlots.value = [];
     slotsMessage.value = "Selecciona servicio, profesional y fecha para ver horarios reales.";
     window.open(whatsappLink.value, "_blank", "noopener,noreferrer");
+
     setTimeout(() => {
       resettingAfterSubmit.value = false;
     }, 0);
@@ -487,10 +381,5 @@ async function submitBooking() {
 
 onMounted(() => {
   fetchCatalog();
-  startCarousel();
-});
-
-onUnmounted(() => {
-  stopCarousel();
 });
 </script>
