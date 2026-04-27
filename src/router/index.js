@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import AdminLoginView from "../views/AdminLoginView.vue";
 import AdminDashboardView from "../views/AdminDashboardView.vue";
-import { useAdminStore } from "../stores/admin.js";
+import { checkAdminSession } from "../utils/api.js";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -25,18 +25,12 @@ router.beforeEach(async (to) => {
   if (!to.meta.requiresAuth) {
     return true;
   }
-
-  const adminStore = useAdminStore();
-
-  if (!adminStore.checkedSession) {
-    await adminStore.restoreSession();
-  }
-
-  if (!adminStore.authenticated) {
+  try {
+    const authenticated = await checkAdminSession();
+    return authenticated ? true : { name: "admin-login" };
+  } catch (error) {
     return { name: "admin-login" };
   }
-
-  return true;
 });
 
 export default router;

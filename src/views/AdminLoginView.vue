@@ -12,8 +12,8 @@
           Clave
           <input v-model="form.password" type="password" autocomplete="current-password" required />
         </label>
-        <button :disabled="adminStore.loading" type="submit">
-          {{ adminStore.loading ? "Ingresando..." : "Entrar al panel" }}
+        <button :disabled="loading" type="submit">
+          {{ loading ? "Ingresando..." : "Entrar al panel" }}
         </button>
         <p v-if="errorMessage" class="form-error">{{ errorMessage }}</p>
       </form>
@@ -24,10 +24,10 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
-import { useAdminStore } from "../stores/admin.js";
+import { loginAdmin } from "../utils/api.js";
 
 const router = useRouter();
-const adminStore = useAdminStore();
+const loading = ref(false);
 const errorMessage = ref("");
 const form = reactive({
   username: "",
@@ -36,12 +36,15 @@ const form = reactive({
 
 async function handleSubmit() {
   errorMessage.value = "";
+  loading.value = true;
 
   try {
-    await adminStore.login(form);
+    await loginAdmin(form);
     router.push("/admin");
   } catch (error) {
     errorMessage.value = error.response?.data?.message || "No se pudo iniciar sesion";
+  } finally {
+    loading.value = false;
   }
 }
 </script>

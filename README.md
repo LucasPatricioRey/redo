@@ -6,7 +6,6 @@ Sitio web de barberia y estudio de imagen con reservas online, panel administrat
 
 - Vue 3
 - Vite
-- Pinia
 - Vue Router
 - Node.js
 - Express

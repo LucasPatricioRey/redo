@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import express from "express";
 import {
   createBooking,
-  getBookingSummary,
   getBookings,
   getBookingsByDate,
   updateBookingStatus,
@@ -36,10 +35,6 @@ app.use(express.json());
 
 app.get("/api/health", async (_request, response) => {
   response.json({ status: "ok", service: "redo-api" });
-});
-
-app.get("/api/catalog", (_request, response) => {
-  response.json({ services, barbers });
 });
 
 app.get("/api/availability", async (request, response) => {
@@ -158,11 +153,6 @@ app.get("/api/admin/bookings", requireAdmin, async (request, response) => {
   });
 
   response.json({ bookings });
-});
-
-app.get("/api/admin/summary", requireAdmin, async (_request, response) => {
-  const summary = await getBookingSummary();
-  response.json({ summary });
 });
 
 app.patch("/api/admin/bookings/:id/status", requireAdmin, async (request, response) => {

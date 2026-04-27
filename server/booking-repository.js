@@ -41,25 +41,6 @@ export async function getBookings({ status, search }) {
   return db.collection(collectionName).find(query).sort({ createdAt: -1 }).toArray();
 }
 
-export async function getBookingSummary() {
-  const db = await getDatabase();
-  const bookings = await db.collection(collectionName).find({}).toArray();
-
-  return bookings.reduce(
-    (accumulator, booking) => {
-      accumulator.total += 1;
-      accumulator[booking.status] += 1;
-      return accumulator;
-    },
-    {
-      total: 0,
-      pendiente: 0,
-      confirmado: 0,
-      cancelado: 0,
-    }
-  );
-}
-
 export async function updateBookingStatus(id, status) {
   const db = await getDatabase();
   const result = await db

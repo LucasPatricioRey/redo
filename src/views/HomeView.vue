@@ -45,13 +45,13 @@
           <div v-for="barber in barbers" :key="barber.slug" class="team-item">
             <h3>{{ barber.name }}</h3>
             <p>{{ barber.role }}</p>
-            <small>{{ barber.specialties.join(" · ") }}</small>
+            <small>{{ barber.specialties.join(" - ") }}</small>
           </div>
         </div>
       </article>
     </section>
 
-    <section class="booking-layout">
+    <section class="booking-section">
       <article class="content-card booking-card">
         <p class="eyebrow">Reserva online</p>
         <h2>Solicitar turno</h2>
@@ -101,7 +101,11 @@
           </div>
           <label>
             Comentarios
-            <textarea v-model="form.notes" rows="4" placeholder="Ejemplo: primer visita, preferencia de estilo, etc."></textarea>
+            <textarea
+              v-model="form.notes"
+              rows="4"
+              placeholder="Ejemplo: primer visita o preferencia de estilo"
+            ></textarea>
           </label>
           <p v-if="slotsMessage" class="form-helper">{{ slotsMessage }}</p>
           <p v-if="errorMessage" class="form-error">{{ errorMessage }}</p>
@@ -111,52 +115,6 @@
           </button>
         </form>
       </article>
-
-      <article class="content-card aside-card">
-        <p class="eyebrow">Resumen de turno</p>
-        <h2>Informacion antes de confirmar</h2>
-        <div class="summary-card">
-          <div class="summary-row">
-            <span>Servicio</span>
-            <strong>{{ selectedService?.name || "Seleccionar" }}</strong>
-          </div>
-          <div class="summary-row">
-            <span>Profesional</span>
-            <strong>{{ selectedBarber?.name || "Seleccionar" }}</strong>
-          </div>
-          <div class="summary-row">
-            <span>Duracion</span>
-            <strong>{{ selectedService ? `${selectedService.duration} min` : "-" }}</strong>
-          </div>
-          <div class="summary-row">
-            <span>Valor estimado</span>
-            <strong>{{ selectedService ? `$${selectedService.price.toLocaleString("es-AR")}` : "-" }}</strong>
-          </div>
-          <div class="summary-row">
-            <span>Direccion</span>
-            <strong>{{ studioInfo.address }}</strong>
-          </div>
-        </div>
-
-        <div class="schedule-card">
-          <p class="eyebrow">Horarios de atencion</p>
-          <ul class="schedule-list">
-            <li v-for="item in scheduleItems" :key="item.label">
-              <span>{{ item.label }}</span>
-              <strong>{{ item.value }}</strong>
-            </li>
-          </ul>
-        </div>
-
-        <p class="eyebrow testimonial-eyebrow">Experiencia</p>
-        <h2>Lo que esperan los clientes habituales</h2>
-        <div class="testimonial-list">
-          <blockquote v-for="item in testimonials" :key="item.name" class="testimonial-item">
-            “{{ item.quote }}”
-            <footer>{{ item.name }}</footer>
-          </blockquote>
-        </div>
-      </article>
     </section>
   </main>
 </template>
@@ -164,7 +122,7 @@
 <script setup>
 import { computed, reactive, ref, watch } from "vue";
 import { api } from "../utils/api.js";
-import { barbers, services, studioInfo, testimonials } from "../../shared/site.js";
+import { barbers, services, studioInfo } from "../../shared/site.js";
 
 const form = reactive({
   customerName: "",
@@ -187,20 +145,6 @@ const minimumDate = computed(() => {
   const today = new Date();
   return today.toISOString().split("T")[0];
 });
-
-const selectedService = computed(() =>
-  services.find((service) => service.slug === form.serviceSlug)
-);
-
-const selectedBarber = computed(() =>
-  barbers.find((barber) => barber.slug === form.barberSlug)
-);
-
-const scheduleItems = [
-  { label: "Lunes a viernes", value: "10:00 a 20:00" },
-  { label: "Sabados", value: "10:00 a 18:00" },
-  { label: "Domingos", value: "Cerrado" },
-];
 
 watch(
   () => [form.serviceSlug, form.barberSlug, form.date],

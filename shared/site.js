@@ -58,14 +58,3 @@ export const barbers = [
     specialties: ["corte moderno", "asesoramiento", "tendencias urbanas"],
   },
 ];
-
-export const testimonials = [
-  {
-    name: "Santiago R.",
-    quote: "El sistema de reserva es claro y el servicio siempre mantiene el mismo nivel.",
-  },
-  {
-    name: "Martin V.",
-    quote: "Se nota cuando un lugar cuida el detalle. Reservar online y llegar con todo listo cambia la experiencia.",
-  },
-];

@@ -11,15 +11,15 @@
     <section class="stats-grid">
       <article class="dashboard-card stat-card">
         <span>Pendientes</span>
-        <strong>{{ summary.pendiente }}</strong>
+        <strong>{{ counters.pendiente }}</strong>
       </article>
       <article class="dashboard-card stat-card">
         <span>Confirmadas</span>
-        <strong>{{ summary.confirmado }}</strong>
+        <strong>{{ counters.confirmado }}</strong>
       </article>
       <article class="dashboard-card stat-card">
         <span>Canceladas</span>
-        <strong>{{ summary.cancelado }}</strong>
+        <strong>{{ counters.cancelado }}</strong>
       </article>
     </section>
 
@@ -55,7 +55,7 @@
             <span class="status-pill" :data-status="booking.status">{{ booking.status }}</span>
           </div>
           <div class="booking-admin-item__meta">
-            <span>{{ booking.date }} · {{ booking.time }}</span>
+            <span>{{ booking.date }} - {{ booking.time }}</span>
             <span>{{ booking.customerPhone }}</span>
           </div>
           <p v-if="booking.notes" class="booking-admin-item__notes">{{ booking.notes }}</p>
@@ -89,13 +89,11 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
-import { useAdminStore } from "../stores/admin.js";
-import { adminApi } from "../utils/api.js";
+import { adminApi, logoutAdmin } from "../utils/api.js";
 
 const router = useRouter();
-const adminStore = useAdminStore();
 const loading = ref(false);
 const bookings = ref([]);
 const feedbackMessage = ref("");
@@ -104,12 +102,16 @@ const filters = reactive({
   status: "todos",
   search: "",
 });
-const summary = reactive({
-  total: 0,
-  pendiente: 0,
-  confirmado: 0,
-  cancelado: 0,
-});
+
+const counters = computed(() =>
+  bookings.value.reduce(
+    (accumulator, booking) => {
+      accumulator[booking.status] += 1;
+      return accumulator;
+    },
+    { pendiente: 0, confirmado: 0, cancelado: 0 }
+  )
+);
 
 async function fetchBookings() {
   loading.value = true;
@@ -126,7 +128,7 @@ async function fetchBookings() {
     bookings.value = data.bookings;
   } catch (error) {
     if (error.response?.status === 401) {
-      await adminStore.logout();
+      await logoutAdmin();
       router.push("/admin-login");
     }
   } finally {
@@ -134,13 +136,8 @@ async function fetchBookings() {
   }
 }
 
-async function fetchSummary() {
-  const { data } = await adminApi.get("/summary");
-  Object.assign(summary, data.summary);
-}
-
 async function logout() {
-  await adminStore.logout();
+  await logoutAdmin();
   router.push("/admin-login");
 }
 
@@ -150,13 +147,11 @@ async function updateStatus(id, status) {
   try {
     await adminApi.patch(`/bookings/${id}/status`, { status });
     feedbackMessage.value = `La reserva se actualizo a ${status}.`;
-    await Promise.all([fetchBookings(), fetchSummary()]);
+    await fetchBookings();
   } finally {
     statusLoadingId.value = "";
   }
 }
 
-onMounted(async () => {
-  await Promise.all([fetchBookings(), fetchSummary()]);
-});
+onMounted(fetchBookings);
 </script>
