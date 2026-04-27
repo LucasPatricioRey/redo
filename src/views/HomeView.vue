@@ -2,6 +2,10 @@
   <main class="page-shell page-shell--home">
     <section class="hero hero--showcase">
       <div class="hero__copy">
+        <div class="hero__brand-mark">
+          <span>REDO</span>
+          <small>Studio de corte y barba</small>
+        </div>
         <p class="eyebrow">Barberia y estudio de imagen</p>
         <h1>REDO Studio</h1>
         <p class="hero__lead">
