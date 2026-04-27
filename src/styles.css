@@ -40,7 +40,7 @@ a {
 
 .page-shell,
 .center-shell {
-  width: min(1120px, calc(100% - 2rem));
+  width: min(1180px, calc(100% - 2rem));
   margin: 0 auto;
   padding: 40px 0 72px;
 }
@@ -56,7 +56,9 @@ a {
 .content-grid,
 .booking-section,
 .stats-grid,
-.booking-admin-list {
+.booking-admin-list,
+.dashboard-grid,
+.simple-list {
   display: grid;
   gap: 24px;
 }
@@ -67,8 +69,18 @@ a {
   min-height: 72vh;
 }
 
-.content-grid {
+.content-grid,
+.stats-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.stats-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.dashboard-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
   margin-top: 24px;
 }
 
@@ -104,12 +116,6 @@ a {
   border-radius: 28px;
   backdrop-filter: blur(12px);
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
-}
-
-.hero__card,
-.auth-card,
-.dashboard-card,
-.content-card {
   padding: 28px;
 }
 
@@ -138,22 +144,27 @@ a {
 .auth-form,
 .booking-form,
 .service-list,
-.team-list {
+.team-list,
+.stack-form {
   display: grid;
   gap: 16px;
 }
 
 .form-grid,
-.filters-row,
-.stats-grid {
+.filters-row {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
 }
 
+.form-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .auth-form label,
 .booking-form label,
-.filters-row label {
+.filters-row label,
+.schedule-editor {
   display: grid;
   gap: 8px;
 }
@@ -163,7 +174,11 @@ a {
 .booking-form select,
 .booking-form textarea,
 .filters-row input,
-.filters-row select {
+.filters-row select,
+.stack-form input,
+.stack-form select,
+.stack-form textarea,
+.schedule-editor input {
   width: 100%;
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.16);
@@ -174,14 +189,18 @@ a {
 
 .auth-form button,
 .booking-form button,
+.stack-form button,
 .secondary-button,
-.action-button {
+.action-button,
+.dashboard-card > button {
   padding: 14px 18px;
   border-radius: 16px;
 }
 
 .auth-form button,
-.booking-form button {
+.booking-form button,
+.stack-form button,
+.dashboard-card > button {
   width: fit-content;
   color: #111111;
   background: var(--accent);
@@ -202,7 +221,8 @@ a {
 
 .service-item,
 .team-item,
-.booking-admin-item {
+.booking-admin-item,
+.simple-item {
   display: flex;
   justify-content: space-between;
   gap: 16px;
@@ -213,13 +233,16 @@ a {
 }
 
 .team-item,
-.booking-admin-item {
+.booking-admin-item,
+.simple-item,
+.schedule-editor {
   display: grid;
 }
 
 .service-item h3,
 .team-item h3,
-.booking-admin-item h3 {
+.booking-admin-item h3,
+.simple-item strong {
   margin: 0 0 8px;
   color: #f6f1ea;
 }
@@ -227,6 +250,7 @@ a {
 .service-item p,
 .team-item p,
 .booking-admin-item p,
+.simple-item p,
 .form-helper,
 .form-error,
 .form-success {
@@ -298,6 +322,10 @@ a {
   background: #f0a0a0;
 }
 
+.action-button--danger {
+  background: #d96e6e;
+}
+
 .action-button:disabled,
 .secondary-button:disabled {
   opacity: 0.65;
@@ -312,12 +340,23 @@ a {
   color: #a7dfb2;
 }
 
-@media (max-width: 860px) {
+.checkbox-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkbox-line input {
+  width: auto;
+}
+
+@media (max-width: 960px) {
   .hero,
   .content-grid,
+  .stats-grid,
+  .dashboard-grid,
   .form-grid,
-  .filters-row,
-  .stats-grid {
+  .filters-row {
     grid-template-columns: 1fr;
   }
 
@@ -327,7 +366,8 @@ a {
   }
 
   .service-item,
-  .booking-admin-item__head {
+  .booking-admin-item__head,
+  .simple-item {
     display: grid;
   }
 
