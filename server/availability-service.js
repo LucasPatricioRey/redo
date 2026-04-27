@@ -23,10 +23,19 @@ export function getWorkingDay(date) {
   return studioInfo.schedule[dayKey];
 }
 
-export function buildAvailableSlots({ date, barberSlug, serviceSlug, bookings }) {
-  const workingDay = getWorkingDay(date);
-  const service = services.find((item) => item.slug === serviceSlug);
-  const barber = barbers.find((item) => item.slug === barberSlug);
+export function buildAvailableSlots({
+  date,
+  barberSlug,
+  serviceSlug,
+  bookings,
+  schedule = studioInfo.schedule,
+  catalogServices = services,
+  catalogBarbers = barbers,
+  blocks = [],
+}) {
+  const workingDay = getWorkingDayFromSchedule(date, schedule);
+  const service = catalogServices.find((item) => item.slug === serviceSlug);
+  const barber = catalogBarbers.find((item) => item.slug === barberSlug);
 
   if (!workingDay?.enabled || !service || !barber) {
     return [];
@@ -36,6 +45,9 @@ export function buildAvailableSlots({ date, barberSlug, serviceSlug, bookings })
   const close = toMinutes(workingDay.close);
   const occupiedBookings = bookings.filter(
     (booking) => booking.barberSlug === barberSlug && booking.status !== "cancelado"
+  );
+  const blockedSlots = blocks.filter(
+    (block) => block.date === date && (block.barberSlug === barberSlug || block.barberSlug === "all")
   );
 
   const slots = [];
@@ -50,10 +62,22 @@ export function buildAvailableSlots({ date, barberSlug, serviceSlug, bookings })
       return overlaps(slotStart, slotEnd, bookingStart, bookingEnd);
     });
 
-    if (!isTaken) {
+    const isBlocked = blockedSlots.some((block) => {
+      const blockStart = toMinutes(block.startTime);
+      const blockEnd = toMinutes(block.endTime);
+      return overlaps(slotStart, slotEnd, blockStart, blockEnd);
+    });
+
+    if (!isTaken && !isBlocked) {
       slots.push(toTimeLabel(cursor));
     }
   }
 
   return slots;
+}
+
+export function getWorkingDayFromSchedule(date, schedule) {
+  const parsedDate = new Date(`${date}T12:00:00`);
+  const dayKey = dayMap[parsedDate.getDay()];
+  return schedule[dayKey];
 }

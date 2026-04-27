@@ -24,7 +24,8 @@
       <article class="content-card">
         <p class="eyebrow">Servicios</p>
         <h2>Una propuesta simple y profesional</h2>
-        <div class="service-list">
+        <p v-if="catalogLoading">Cargando servicios...</p>
+        <div v-else class="service-list">
           <div v-for="service in services" :key="service.slug" class="service-item">
             <div>
               <h3>{{ service.name }}</h3>
@@ -32,7 +33,7 @@
             </div>
             <div class="service-item__meta">
               <span>{{ service.duration }} min</span>
-              <strong>${{ service.price.toLocaleString("es-AR") }}</strong>
+              <strong>${{ Number(service.price).toLocaleString("es-AR") }}</strong>
             </div>
           </div>
         </div>
@@ -41,11 +42,12 @@
       <article class="content-card">
         <p class="eyebrow">Equipo</p>
         <h2>Profesionales con agenda y especialidades definidas</h2>
-        <div class="team-list">
+        <p v-if="catalogLoading">Cargando profesionales...</p>
+        <div v-else class="team-list">
           <div v-for="barber in barbers" :key="barber.slug" class="team-item">
             <h3>{{ barber.name }}</h3>
             <p>{{ barber.role }}</p>
-            <small>{{ barber.specialties.join(" - ") }}</small>
+            <small>{{ (barber.specialties || []).join(" - ") }}</small>
           </div>
         </div>
       </article>
@@ -67,7 +69,7 @@
             </label>
             <label>
               Servicio
-              <select v-model="form.serviceSlug" required>
+              <select v-model="form.serviceSlug" :disabled="catalogLoading || !services.length" required>
                 <option disabled value="">Seleccionar servicio</option>
                 <option v-for="service in services" :key="service.slug" :value="service.slug">
                   {{ service.name }}
@@ -76,7 +78,7 @@
             </label>
             <label>
               Profesional
-              <select v-model="form.barberSlug" required>
+              <select v-model="form.barberSlug" :disabled="catalogLoading || !barbers.length" required>
                 <option disabled value="">Seleccionar profesional</option>
                 <option v-for="barber in barbers" :key="barber.slug" :value="barber.slug">
                   {{ barber.name }}
@@ -110,7 +112,7 @@
           <p v-if="slotsMessage" class="form-helper">{{ slotsMessage }}</p>
           <p v-if="errorMessage" class="form-error">{{ errorMessage }}</p>
           <p v-if="successMessage" class="form-success">{{ successMessage }}</p>
-          <button :disabled="submitting" type="submit">
+          <button :disabled="submitting || catalogLoading" type="submit">
             {{ submitting ? "Enviando reserva..." : "Confirmar solicitud" }}
           </button>
         </form>
@@ -120,10 +122,13 @@
 </template>
 
 <script setup>
-import { computed, reactive, ref, watch } from "vue";
+import { computed, onMounted, reactive, ref, watch } from "vue";
 import { api } from "../utils/api.js";
-import { barbers, services, studioInfo } from "../../shared/site.js";
+import { studioInfo } from "../../shared/site.js";
 
+const services = ref([]);
+const barbers = ref([]);
+const catalogLoading = ref(true);
 const form = reactive({
   customerName: "",
   customerPhone: "",
@@ -145,6 +150,18 @@ const minimumDate = computed(() => {
   const today = new Date();
   return today.toISOString().split("T")[0];
 });
+
+async function fetchCatalog() {
+  catalogLoading.value = true;
+
+  try {
+    const { data } = await api.get("/catalog");
+    services.value = data.services || [];
+    barbers.value = data.barbers || [];
+  } finally {
+    catalogLoading.value = false;
+  }
+}
 
 watch(
   () => [form.serviceSlug, form.barberSlug, form.date],
@@ -210,4 +227,6 @@ async function submitBooking() {
     submitting.value = false;
   }
 }
+
+onMounted(fetchCatalog);
 </script>

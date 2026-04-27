@@ -53,3 +53,21 @@ export async function updateBookingStatus(id, status) {
 
   return result;
 }
+
+export async function updateBooking(id, payload) {
+  const db = await getDatabase();
+  const result = await db
+    .collection(collectionName)
+    .findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      { $set: { ...payload, updatedAt: new Date() } },
+      { returnDocument: "after" }
+    );
+
+  return result;
+}
+
+export async function deleteBooking(id) {
+  const db = await getDatabase();
+  await db.collection(collectionName).deleteOne({ _id: new ObjectId(id) });
+}
