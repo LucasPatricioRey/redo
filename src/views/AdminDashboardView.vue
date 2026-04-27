@@ -11,15 +11,15 @@
     <section class="stats-grid">
       <article class="dashboard-card stat-card">
         <span>Pendientes</span>
-        <strong>{{ counters.pendiente }}</strong>
+        <strong>{{ summary.pendiente }}</strong>
       </article>
       <article class="dashboard-card stat-card">
         <span>Confirmadas</span>
-        <strong>{{ counters.confirmado }}</strong>
+        <strong>{{ summary.confirmado }}</strong>
       </article>
       <article class="dashboard-card stat-card">
         <span>Canceladas</span>
-        <strong>{{ counters.cancelado }}</strong>
+        <strong>{{ summary.cancelado }}</strong>
       </article>
     </section>
 
@@ -41,6 +41,7 @@
         <button class="secondary-button" @click="fetchBookings">Actualizar</button>
       </div>
 
+      <p v-if="feedbackMessage" class="form-success">{{ feedbackMessage }}</p>
       <p v-if="loading">Cargando reservas...</p>
       <p v-else-if="!bookings.length">No hay reservas para los filtros actuales.</p>
 
@@ -59,13 +60,25 @@
           </div>
           <p v-if="booking.notes" class="booking-admin-item__notes">{{ booking.notes }}</p>
           <div class="actions-row">
-            <button class="secondary-button" @click="updateStatus(booking._id, 'pendiente')">
+            <button
+              class="secondary-button"
+              :disabled="statusLoadingId === booking._id"
+              @click="updateStatus(booking._id, 'pendiente')"
+            >
               Marcar pendiente
             </button>
-            <button class="action-button action-button--confirm" @click="updateStatus(booking._id, 'confirmado')">
-              Confirmar
+            <button
+              class="action-button action-button--confirm"
+              :disabled="statusLoadingId === booking._id"
+              @click="updateStatus(booking._id, 'confirmado')"
+            >
+              {{ statusLoadingId === booking._id ? "Actualizando..." : "Confirmar" }}
             </button>
-            <button class="action-button action-button--cancel" @click="updateStatus(booking._id, 'cancelado')">
+            <button
+              class="action-button action-button--cancel"
+              :disabled="statusLoadingId === booking._id"
+              @click="updateStatus(booking._id, 'cancelado')"
+            >
               Cancelar
             </button>
           </div>
@@ -76,7 +89,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAdminStore } from "../stores/admin.js";
 import { adminApi } from "../utils/api.js";
@@ -85,23 +98,22 @@ const router = useRouter();
 const adminStore = useAdminStore();
 const loading = ref(false);
 const bookings = ref([]);
+const feedbackMessage = ref("");
+const statusLoadingId = ref("");
 const filters = reactive({
   status: "todos",
   search: "",
 });
-
-const counters = computed(() =>
-  bookings.value.reduce(
-    (accumulator, booking) => {
-      accumulator[booking.status] += 1;
-      return accumulator;
-    },
-    { pendiente: 0, confirmado: 0, cancelado: 0 }
-  )
-);
+const summary = reactive({
+  total: 0,
+  pendiente: 0,
+  confirmado: 0,
+  cancelado: 0,
+});
 
 async function fetchBookings() {
   loading.value = true;
+  feedbackMessage.value = "";
 
   try {
     const { data } = await adminApi.get("/bookings", {
@@ -122,15 +134,29 @@ async function fetchBookings() {
   }
 }
 
+async function fetchSummary() {
+  const { data } = await adminApi.get("/summary");
+  Object.assign(summary, data.summary);
+}
+
 async function logout() {
   await adminStore.logout();
   router.push("/admin-login");
 }
 
 async function updateStatus(id, status) {
-  await adminApi.patch(`/bookings/${id}/status`, { status });
-  await fetchBookings();
+  statusLoadingId.value = id;
+
+  try {
+    await adminApi.patch(`/bookings/${id}/status`, { status });
+    feedbackMessage.value = `La reserva se actualizo a ${status}.`;
+    await Promise.all([fetchBookings(), fetchSummary()]);
+  } finally {
+    statusLoadingId.value = "";
+  }
 }
 
-onMounted(fetchBookings);
+onMounted(async () => {
+  await Promise.all([fetchBookings(), fetchSummary()]);
+});
 </script>

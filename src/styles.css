@@ -404,6 +404,12 @@ a {
   color: #111111;
 }
 
+.action-button:disabled,
+.secondary-button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
 .action-button--confirm {
   background: #9fdba9;
 }

@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import express from "express";
 import {
   createBooking,
+  getBookingSummary,
   getBookings,
   getBookingsByDate,
   updateBookingStatus,
@@ -157,6 +158,11 @@ app.get("/api/admin/bookings", requireAdmin, async (request, response) => {
   });
 
   response.json({ bookings });
+});
+
+app.get("/api/admin/summary", requireAdmin, async (_request, response) => {
+  const summary = await getBookingSummary();
+  response.json({ summary });
 });
 
 app.patch("/api/admin/bookings/:id/status", requireAdmin, async (request, response) => {
