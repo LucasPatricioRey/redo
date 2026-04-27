@@ -137,6 +137,12 @@ a {
   border-radius: 999px;
 }
 
+.hero__note {
+  display: inline-block;
+  margin-top: 16px;
+  color: rgba(246, 241, 234, 0.68);
+}
+
 .auth-card {
   width: min(100%, 440px);
 }
@@ -251,6 +257,7 @@ a {
 .team-item p,
 .booking-admin-item p,
 .simple-item p,
+.section-helper,
 .form-helper,
 .form-error,
 .form-success {
@@ -338,6 +345,26 @@ a {
 
 .form-success {
   color: #a7dfb2;
+}
+
+.success-card {
+  margin-top: 24px;
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(88, 168, 108, 0.12);
+  border: 1px solid rgba(88, 168, 108, 0.28);
+  display: grid;
+  gap: 12px;
+}
+
+.success-card h3 {
+  margin: 0;
+  color: #f6f1ea;
+}
+
+.success-card__grid {
+  display: grid;
+  gap: 8px;
 }
 
 .checkbox-line {

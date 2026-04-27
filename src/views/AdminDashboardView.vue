@@ -5,7 +5,10 @@
         <p class="eyebrow">Gestion de reservas</p>
         <h1>Panel REDO</h1>
       </div>
-      <button class="secondary-button" @click="logout">Cerrar sesion</button>
+      <div class="actions-row">
+        <button class="secondary-button" @click="goHome">Volver al sitio</button>
+        <button class="secondary-button" @click="logout">Cerrar sesion</button>
+      </div>
     </section>
 
     <section class="stats-grid">
@@ -144,9 +147,11 @@
         <p class="eyebrow">Servicios</p>
         <form class="stack-form" @submit.prevent="saveService">
           <input v-model="serviceForm.name" type="text" placeholder="Nombre del servicio" required />
-          <input v-model="serviceForm.description" type="text" placeholder="Descripcion" required />
-          <input v-model.number="serviceForm.duration" type="number" min="15" step="15" placeholder="Duracion" required />
-          <input v-model.number="serviceForm.price" type="number" min="0" step="1000" placeholder="Precio" required />
+          <input v-model="serviceForm.description" type="text" placeholder="Descripcion del servicio" required />
+          <label>
+            Precio
+            <input v-model.number="serviceForm.price" type="number" min="0" step="1000" placeholder="Ejemplo: 18000" required />
+          </label>
           <div class="actions-row">
             <button type="submit">{{ serviceForm.id ? "Actualizar servicio" : "Agregar servicio" }}</button>
             <button v-if="serviceForm.id" class="secondary-button" type="button" @click="resetServiceForm">Cancelar</button>
@@ -156,7 +161,7 @@
           <article v-for="service in services" :key="service._id || service.slug" class="simple-item">
             <div>
               <strong>{{ service.name }}</strong>
-              <p>{{ service.duration }} min - ${{ Number(service.price).toLocaleString("es-AR") }}</p>
+              <p>${{ Number(service.price).toLocaleString("es-AR") }}</p>
             </div>
             <div class="actions-row">
               <button class="secondary-button" @click="editService(service)">Editar</button>
@@ -193,6 +198,7 @@
 
       <article class="dashboard-card">
         <p class="eyebrow">Agenda semanal</p>
+        <p class="section-helper">Define desde que hora hasta que hora se toman turnos cada dia.</p>
         <div class="simple-list">
           <article v-for="day in dayEntries" :key="day.key" class="simple-item">
             <div class="schedule-editor">
@@ -201,12 +207,21 @@
                 <input v-model="schedule[day.key].enabled" type="checkbox" />
                 Habilitado
               </label>
-              <input v-model="schedule[day.key].open" type="time" :disabled="!schedule[day.key].enabled" />
-              <input v-model="schedule[day.key].close" type="time" :disabled="!schedule[day.key].enabled" />
+              <div class="form-grid form-grid--two">
+                <label>
+                  Desde
+                  <input v-model="schedule[day.key].open" type="time" :disabled="!schedule[day.key].enabled" />
+                </label>
+                <label>
+                  Hasta
+                  <input v-model="schedule[day.key].close" type="time" :disabled="!schedule[day.key].enabled" />
+                </label>
+              </div>
             </div>
           </article>
         </div>
         <button @click="saveSchedule">Guardar agenda</button>
+        <p v-if="scheduleMessage" class="form-success">{{ scheduleMessage }}</p>
       </article>
 
       <article class="dashboard-card">
@@ -257,6 +272,7 @@ const services = ref([]);
 const barbers = ref([]);
 const blocks = ref([]);
 const editSlots = ref([]);
+const scheduleMessage = ref("");
 
 const dayEntries = [
   { key: "monday", label: "Lunes" },
@@ -514,6 +530,7 @@ async function removeBarber(id) {
 async function saveSchedule() {
   await adminApi.put("/settings", { schedule });
   feedbackMessage.value = "Agenda semanal actualizada.";
+  scheduleMessage.value = "La agenda se guardo correctamente.";
 }
 
 async function saveBlock() {
@@ -532,6 +549,10 @@ async function removeBlock(id) {
 async function logout() {
   await logoutAdmin();
   router.push("/admin-login");
+}
+
+function goHome() {
+  router.push("/");
 }
 
 watch(

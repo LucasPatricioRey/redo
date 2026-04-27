@@ -16,7 +16,7 @@
       <div class="hero__card">
         <p class="hero__label">Turnos online</p>
         <p class="hero__value">Reservas con disponibilidad real por profesional y horario.</p>
-        <router-link class="hero__link" to="/admin-login">Acceso administrador</router-link>
+        <span class="hero__note">Atencion con agenda confirmada y horarios actualizados.</span>
       </div>
     </section>
 
@@ -111,11 +111,25 @@
           </label>
           <p v-if="slotsMessage" class="form-helper">{{ slotsMessage }}</p>
           <p v-if="errorMessage" class="form-error">{{ errorMessage }}</p>
-          <p v-if="successMessage" class="form-success">{{ successMessage }}</p>
           <button :disabled="submitting || catalogLoading" type="submit">
             {{ submitting ? "Enviando reserva..." : "Confirmar solicitud" }}
           </button>
         </form>
+
+        <div v-if="reservationSummary" class="success-card">
+          <p class="eyebrow">Reserva enviada</p>
+          <h3>Solicitud recibida correctamente</h3>
+          <p class="form-success">{{ successMessage }}</p>
+          <div class="success-card__grid">
+            <span>Servicio: <strong>{{ reservationSummary.serviceName }}</strong></span>
+            <span>Profesional: <strong>{{ reservationSummary.barberName }}</strong></span>
+            <span>Fecha: <strong>{{ reservationSummary.date }}</strong></span>
+            <span>Horario: <strong>{{ reservationSummary.time }}</strong></span>
+          </div>
+          <a class="hero__link" :href="whatsappLink" target="_blank" rel="noreferrer">
+            Confirmar por WhatsApp
+          </a>
+        </div>
       </article>
     </section>
   </main>
@@ -144,11 +158,25 @@ const loadingSlots = ref(false);
 const submitting = ref(false);
 const errorMessage = ref("");
 const successMessage = ref("");
+const reservationSummary = ref(null);
 const slotsMessage = ref("Selecciona servicio, profesional y fecha para ver horarios reales.");
 
 const minimumDate = computed(() => {
   const today = new Date();
   return today.toISOString().split("T")[0];
+});
+
+const whatsappLink = computed(() => {
+  if (!reservationSummary.value) {
+    return "#";
+  }
+
+  const phone = studioInfo.phone.replace(/\D/g, "");
+  const message = encodeURIComponent(
+    `Hola REDO, envie una reserva para ${reservationSummary.value.serviceName} con ${reservationSummary.value.barberName} el ${reservationSummary.value.date} a las ${reservationSummary.value.time}.`
+  );
+
+  return `https://wa.me/${phone}?text=${message}`;
 });
 
 async function fetchCatalog() {
@@ -170,6 +198,7 @@ watch(
     availableSlots.value = [];
     successMessage.value = "";
     errorMessage.value = "";
+    reservationSummary.value = null;
 
     if (!serviceSlug || !barberSlug || !date) {
       slotsMessage.value = "Selecciona servicio, profesional y fecha para ver horarios reales.";
@@ -207,9 +236,17 @@ async function submitBooking() {
       customerPhone: form.customerPhone.trim(),
       notes: form.notes.trim(),
     };
+    const selectedService = services.value.find((item) => item.slug === payload.serviceSlug);
+    const selectedBarber = barbers.value.find((item) => item.slug === payload.barberSlug);
 
     const { data } = await api.post("/bookings", payload);
-    successMessage.value = `${data.message} Te esperamos para confirmar los detalles del turno.`;
+    successMessage.value = `${data.message} Ahora ya tenes una confirmacion visible del turno solicitado.`;
+    reservationSummary.value = {
+      serviceName: selectedService?.name || payload.serviceSlug,
+      barberName: selectedBarber?.name || payload.barberSlug,
+      date: payload.date,
+      time: payload.time,
+    };
     Object.assign(form, {
       customerName: "",
       customerPhone: "",
