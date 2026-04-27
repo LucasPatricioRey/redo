@@ -1,9 +1,13 @@
 <template>
-  <main class="page-shell">
-    <section class="dashboard-head">
-      <div>
+  <main class="page-shell page-shell--admin">
+    <section class="dashboard-head dashboard-head--admin">
+      <div class="dashboard-head__copy">
         <p class="eyebrow">Gestion de reservas</p>
         <h1>Panel REDO</h1>
+        <p class="section-helper">
+          Organiza la agenda, responde reservas y mantene actualizada la propuesta del salon desde
+          un solo lugar.
+        </p>
       </div>
       <div class="actions-row">
         <button class="secondary-button" @click="goHome">Volver al sitio</button>
@@ -51,7 +55,7 @@
         <p v-else-if="!bookings.length">No hay reservas para los filtros actuales.</p>
 
         <div v-else class="booking-admin-list">
-          <article v-for="booking in bookings" :key="booking._id" class="booking-admin-item">
+          <article v-for="booking in visibleBookings" :key="booking._id" class="booking-admin-item">
             <div class="booking-admin-item__head">
               <div>
                 <h3>{{ booking.customerName }}</h3>
@@ -93,6 +97,13 @@
             </div>
           </article>
         </div>
+        <button
+          v-if="bookings.length > maxVisibleItems"
+          class="secondary-button secondary-button--full"
+          @click="showAllBookings = !showAllBookings"
+        >
+          {{ showAllBookings ? "Ver menos reservas" : "Ver mas reservas" }}
+        </button>
       </article>
 
       <article class="dashboard-card">
@@ -158,7 +169,7 @@
           </div>
         </form>
         <div class="simple-list">
-          <article v-for="service in services" :key="service._id || service.slug" class="simple-item">
+          <article v-for="service in visibleServices" :key="service._id || service.slug" class="simple-item">
             <div>
               <strong>{{ service.name }}</strong>
               <p>${{ Number(service.price).toLocaleString("es-AR") }}</p>
@@ -169,6 +180,14 @@
             </div>
           </article>
         </div>
+        <button
+          v-if="services.length > maxVisibleItems"
+          class="secondary-button secondary-button--full"
+          type="button"
+          @click="showAllServices = !showAllServices"
+        >
+          {{ showAllServices ? "Ver menos servicios" : "Ver mas servicios" }}
+        </button>
       </article>
 
       <article class="dashboard-card">
@@ -183,7 +202,7 @@
           </div>
         </form>
         <div class="simple-list">
-          <article v-for="barber in barbers" :key="barber._id || barber.slug" class="simple-item">
+          <article v-for="barber in visibleBarbers" :key="barber._id || barber.slug" class="simple-item">
             <div>
               <strong>{{ barber.name }}</strong>
               <p>{{ barber.role }}</p>
@@ -194,6 +213,14 @@
             </div>
           </article>
         </div>
+        <button
+          v-if="barbers.length > maxVisibleItems"
+          class="secondary-button secondary-button--full"
+          type="button"
+          @click="showAllBarbers = !showAllBarbers"
+        >
+          {{ showAllBarbers ? "Ver menos profesionales" : "Ver mas profesionales" }}
+        </button>
       </article>
 
       <article class="dashboard-card">
@@ -242,7 +269,7 @@
           <button type="submit">Agregar bloqueo</button>
         </form>
         <div class="simple-list">
-          <article v-for="block in blocks" :key="block._id" class="simple-item">
+          <article v-for="block in visibleBlocks" :key="block._id" class="simple-item">
             <div>
               <strong>{{ block.date }} - {{ block.startTime }} / {{ block.endTime }}</strong>
               <p>{{ block.barberSlug === "all" ? "Todo el equipo" : block.barberSlug }} - {{ block.reason || "Sin motivo" }}</p>
@@ -250,6 +277,14 @@
             <button class="action-button action-button--danger" @click="removeBlock(block._id)">Eliminar</button>
           </article>
         </div>
+        <button
+          v-if="blocks.length > maxVisibleItems"
+          class="secondary-button secondary-button--full"
+          type="button"
+          @click="showAllBlocks = !showAllBlocks"
+        >
+          {{ showAllBlocks ? "Ver menos bloqueos" : "Ver mas bloqueos" }}
+        </button>
       </article>
     </section>
   </main>
@@ -273,6 +308,11 @@ const barbers = ref([]);
 const blocks = ref([]);
 const editSlots = ref([]);
 const scheduleMessage = ref("");
+const maxVisibleItems = 4;
+const showAllBookings = ref(false);
+const showAllServices = ref(false);
+const showAllBarbers = ref(false);
+const showAllBlocks = ref(false);
 
 const dayEntries = [
   { key: "monday", label: "Lunes" },
@@ -341,6 +381,22 @@ const counters = computed(() =>
     },
     { pendiente: 0, confirmado: 0, cancelado: 0 }
   )
+);
+
+const visibleBookings = computed(() =>
+  showAllBookings.value ? bookings.value : bookings.value.slice(0, maxVisibleItems)
+);
+
+const visibleServices = computed(() =>
+  showAllServices.value ? services.value : services.value.slice(0, maxVisibleItems)
+);
+
+const visibleBarbers = computed(() =>
+  showAllBarbers.value ? barbers.value : barbers.value.slice(0, maxVisibleItems)
+);
+
+const visibleBlocks = computed(() =>
+  showAllBlocks.value ? blocks.value : blocks.value.slice(0, maxVisibleItems)
 );
 
 function resetServiceForm() {

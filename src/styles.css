@@ -71,6 +71,12 @@ img {
   padding: 32px 0;
 }
 
+.center-shell--admin {
+  background:
+    radial-gradient(circle at top left, rgba(244, 239, 232, 0.95), transparent 30%),
+    linear-gradient(180deg, #fffdfb 0%, #f3ece5 100%);
+}
+
 .redo-header {
   position: sticky;
   top: 0;
@@ -315,10 +321,37 @@ img {
   background: var(--sand);
   border-radius: 28px;
   padding: 30px;
+  box-shadow: 0 22px 60px rgba(15, 15, 16, 0.08);
+  border: 1px solid rgba(15, 15, 16, 0.05);
 }
 
 .auth-card {
   width: min(100%, 440px);
+}
+
+.auth-card--admin {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(244, 239, 232, 0.95)),
+    var(--sand);
+}
+
+.auth-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.auth-card__badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(15, 15, 16, 0.08);
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 .auth-card h1,
@@ -331,6 +364,15 @@ img {
 
 .dashboard-head h1 {
   font-size: clamp(2.4rem, 5vw, 4rem);
+}
+
+.dashboard-head--admin {
+  padding: 0 0 12px;
+  border-bottom: 1px solid rgba(15, 15, 16, 0.08);
+}
+
+.dashboard-head__copy {
+  max-width: 720px;
 }
 
 .auth-form,
@@ -413,6 +455,11 @@ img {
   border: 1px solid rgba(15, 15, 16, 0.14);
 }
 
+.secondary-button--full {
+  width: 100%;
+  margin-top: 10px;
+}
+
 .dashboard-head,
 .dashboard-grid,
 .stats-grid,
@@ -472,6 +519,7 @@ img {
   padding: 18px;
   border-radius: 22px;
   background: rgba(255, 255, 255, 0.68);
+  border: 1px solid rgba(15, 15, 16, 0.05);
 }
 
 .booking-admin-item__head {
@@ -488,6 +536,12 @@ img {
 .booking-admin-item__notes,
 .section-helper {
   color: var(--text-soft);
+}
+
+.booking-admin-item__meta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 .status-pill {
@@ -706,7 +760,8 @@ img {
   .redo-intro__actions,
   .redo-form__footer,
   .dashboard-head,
-  .booking-admin-item__head {
+  .booking-admin-item__head,
+  .booking-admin-item__meta {
     display: grid;
   }
 

@@ -1,8 +1,14 @@
 <template>
-  <main class="center-shell">
-    <section class="auth-card">
-      <p class="eyebrow">Panel administrativo</p>
-      <h1>Ingresar</h1>
+  <main class="center-shell center-shell--admin">
+    <section class="auth-card auth-card--admin">
+      <div class="auth-card__top">
+        <p class="eyebrow">Acceso interno</p>
+        <span class="auth-card__badge">REDO</span>
+      </div>
+      <h1>Panel de administracion</h1>
+      <p class="section-helper">
+        Ingresá para gestionar reservas, servicios, profesionales, horarios y bloqueos manuales.
+      </p>
       <form class="auth-form" @submit.prevent="handleSubmit">
         <label>
           Usuario
