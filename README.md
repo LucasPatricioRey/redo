@@ -1,39 +1,51 @@
-# REDO
+# REDO Studio
 
-Sitio full stack para una barberia/peluqueria moderna, pensado para operar con una presencia digital profesional y una base tecnica lista para reservas online.
+Sitio web de barberia y estudio de imagen con reservas online, panel administrativo y disponibilidad real por profesional.
 
 ## Stack
 
-- Next.js 16
-- TypeScript
-- Tailwind CSS 4
+- Vue 3
+- Vite
+- Pinia
+- Vue Router
+- Node.js
+- Express
 - MongoDB
-- MongoDB Driver
-- Zod
-- Vercel
-
-## Estructura
-
-- `src/app`: rutas, landing y endpoints
-- `src/lib`: configuracion, acceso a MongoDB y repositorios
-- `docs`: definicion de producto
-
-## Scripts
-
-```bash
-npm run dev
-npm run lint
-npm run build
-```
 
 ## Variables de entorno
 
-Crear `.env.local` a partir de `.env.example` y completar `MONGODB_URI` y `MONGODB_DB_NAME`.
+Crear un archivo `.env.local` con estas variables:
 
-## Estado actual
+```env
+MONGODB_URI=
+MONGODB_DB_NAME=redo
+ADMIN_USERNAME=
+ADMIN_PASSWORD=
+ADMIN_SESSION_SECRET=
+```
 
-- Landing inicial con identidad visual propia.
-- Documentacion de concepto, MVP y roadmap.
-- Endpoint `GET /api/health`.
-- Endpoint `POST /api/bookings`.
-- Integracion inicial con MongoDB para reservas.
+## Desarrollo local
+
+Frontend:
+
+```bash
+npm run dev
+```
+
+API:
+
+```bash
+npm run dev:api
+```
+
+Ambos al mismo tiempo:
+
+```bash
+npm run dev:full
+```
+
+## Produccion
+
+```bash
+npm run build
+```
