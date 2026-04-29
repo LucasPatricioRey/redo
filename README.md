@@ -144,3 +144,7 @@ Hoy el proyecto ya cubre:
 ## Autor
 
 Desarrollado por [Lucas Patricio Rey](https://github.com/LucasPatricioRey).
+
+## Licencia
+
+MIT
