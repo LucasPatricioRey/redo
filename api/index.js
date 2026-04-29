@@ -1,7 +1,7 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import dotenv from "dotenv";
 import express from "express";
+import { env } from "../server/env.js";
 import {
   deleteBarber,
   deleteBlock,
@@ -29,12 +29,7 @@ import {
   requireAdmin,
 } from "../server/admin-auth.js";
 
-dotenv.config({ path: ".env.local", quiet: true });
-dotenv.config({ quiet: true });
-
 const app = express();
-const adminUsername = process.env.ADMIN_USERNAME || "lucas";
-const adminPassword = process.env.ADMIN_PASSWORD || "RedoAdmin2026!";
 
 function sanitizeBookingPayload(body) {
   return {
@@ -179,7 +174,7 @@ app.post("/api/bookings", async (request, response) => {
 app.post("/api/admin/login", async (request, response) => {
   const { username, password } = request.body;
 
-  if (username !== adminUsername || password !== adminPassword) {
+  if (username !== env.adminUsername || password !== env.adminPassword) {
     response.status(401).json({ message: "Credenciales invalidas" });
     return;
   }

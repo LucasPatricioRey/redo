@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
+import { env } from "./env.js";
 
 const cookieName = "redo_admin_token";
-const secret = process.env.ADMIN_SESSION_SECRET || "redo-admin-secret";
 
 function serializeCookie(name, value, options = {}) {
   const parts = [`${name}=${value}`];
@@ -42,14 +42,14 @@ function getCookieOptions() {
   return {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: env.isProduction,
     maxAge: 1000 * 60 * 60 * 12,
     path: "/",
   };
 }
 
 export function createAdminSession(response) {
-  const token = jwt.sign({ role: "admin" }, secret, { expiresIn: "12h" });
+  const token = jwt.sign({ role: "admin" }, env.adminSessionSecret, { expiresIn: "12h" });
   applyCookie(response, { token, options: getCookieOptions() });
 }
 
@@ -85,7 +85,7 @@ export function readAdminSession(request) {
   }
 
   try {
-    return jwt.verify(token, secret);
+    return jwt.verify(token, env.adminSessionSecret);
   } catch (error) {
     return null;
   }

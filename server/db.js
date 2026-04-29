@@ -1,17 +1,7 @@
 import { MongoClient } from "mongodb";
-import dotenv from "dotenv";
+import { env } from "./env.js";
 
-dotenv.config({ path: ".env.local", quiet: true });
-dotenv.config({ quiet: true });
-
-const uri = process.env.MONGODB_URI;
-const dbName = process.env.MONGODB_DB_NAME || "redo";
-
-if (!uri) {
-  throw new Error("Falta la variable MONGODB_URI");
-}
-
-const client = new MongoClient(uri);
+const client = new MongoClient(env.mongodbUri);
 let clientPromise;
 
 export async function getDatabase() {
@@ -20,5 +10,5 @@ export async function getDatabase() {
   }
 
   const connection = await clientPromise;
-  return connection.db(dbName);
+  return connection.db(env.mongodbDbName);
 }

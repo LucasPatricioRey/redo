@@ -68,6 +68,8 @@ ADMIN_PASSWORD=...
 ADMIN_SESSION_SECRET=...
 ```
 
+La API no inicia si falta `MONGODB_URI`, `ADMIN_USERNAME`, `ADMIN_PASSWORD` o `ADMIN_SESSION_SECRET`.
+
 Hay un archivo de ejemplo listo en:
 
 - `.env.example`
